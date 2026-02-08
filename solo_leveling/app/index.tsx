@@ -10,14 +10,14 @@ export default function Index() {
       const { data: { session } } = await supabase.auth.getSession();
 
       if (session) {
-        router.replace("/(tabs)");       // already logged in
+        router.replace("/(tabs)");     
       } else {
-        router.replace("/(auth)/login"); // open login FIRST
+        router.replace("/(auth)/login"); 
       }
     };
 
     checkUser();
   }, []);
 
-  return null; // nothing visible while deciding
+  return null; 
 }
