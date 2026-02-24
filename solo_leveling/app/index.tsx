@@ -10,14 +10,14 @@ export default function Index() {
       const { data: { session } } = await supabase.auth.getSession();
 
       if (session) {
-        router.replace("/(tabs)");     
+        router.replace("/(tabs)");
       } else {
-        router.replace("/(auth)/login"); 
+        router.replace("/(auth)/login");
       }
     };
 
     checkUser();
-  }, []);
+  }, [router]);
 
   return null; 
 }

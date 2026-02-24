@@ -46,7 +46,7 @@ export default function Register() {
         Alert.alert("Confirm Email", result.message);
       } else {
         Alert.alert("Success", "Account created!");
-        router.replace("/(auth)/login"); 
+        router.replace("/(tabs)");
       }
     } catch (err: any) {
       Alert.alert("Registration failed", err.message || "Something went wrong");
