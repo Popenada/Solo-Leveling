@@ -6,6 +6,7 @@ export const registerUser = async (
   username: string
 ) => {
   try {
+    //
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -30,6 +31,8 @@ export const registerUser = async (
         id: user.id,
         email,
         username,
+        exp: 0,
+        level: 1
       },
     ]);
 

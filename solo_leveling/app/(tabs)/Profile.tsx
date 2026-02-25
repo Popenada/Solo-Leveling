@@ -1,10 +1,10 @@
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { supabase } from "@/lib/supabase";
 
-export default function HomeScreen() {
+export default function ProfileScreen() {
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);

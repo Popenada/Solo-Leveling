@@ -21,7 +21,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
-    // validation
+    // validation and error checkings for registering
     if (!username || !email || !password || !confirmPassword) {
       Alert.alert("Error", "Please fill all fields");
       return;
@@ -39,14 +39,14 @@ export default function Register() {
 
     try {
       setLoading(true);
-
+      // Awaiting user authentication from authservice for email, password, and username
       const result = await registerUser(email, password, username);
 
       if (result?.needsEmailConfirmation) {
         Alert.alert("Confirm Email", result.message);
       } else {
         Alert.alert("Success", "Account created!");
-        router.replace("/(tabs)");
+        router.replace("/Profile");
       }
     } catch (err: any) {
       Alert.alert("Registration failed", err.message || "Something went wrong");
