@@ -1,53 +1,81 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
+export const theme = {
+  colors: {
+    // backgrounds
+    bg: '#05050f',
+    bg2: '#0a0a1a',
+    card: '#0d0d20',
 
-import { Platform } from 'react-native';
+    // accents
+    purple: '6347ff',
+    purpleLight: '#8b6fff',
+    cyan: '#06d6e8',
+    gold: '#f5c842',
+    red: '#ff4757',
+    green: '#2ecc71',
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+    // text
+    text: '#e8e8f0',
+    textMid: 'a0a0c0',
+    textDim: '#6b6b8a',
+
+    // borders
+    border: 'rgba(99,71,255,0.2)',
+    borderBright: 'rgba(99,71,255,0.6)'
+  },
+  // font function
+  fonts: {
+    display: 'Orbitron',
+    body: 'Rajdhani',
+  },
+  // radius function
+  radius: {
+    sm: 8,
+    md: 12,
+    lg: 16,
+    full: 9000
+  },
+  // spacing
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 30
+  },
+  // shadows
+  shadows: {
+    purple: {
+      shadowColor: '#6347ff',
+      shadowOffset: { width: 0, height: 0},
+      shadowOpacity: 0.5,
+      shadowRadius: 12,
+      elevation: 8,
+    },
+    cyan: {
+      shadowColor: '#06d6e8',
+      shadowOffset: { width: 0, height: 0},
+      shadowOpacity: 0.4,
+      shadowRadius: 10,
+      elevatiob: 6,
+    }
+  }
+}
 
 export const Colors = {
   light: {
     text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
+    background: '#ffffff',
+    tint: theme.colors.purpleLight,
     icon: '#687076',
     tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    tabIconSelected: theme.colors.purpleLight,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: theme.colors.text,
+    background: theme.colors.bg,
+    tint: theme.colors.purpleLight,
+    icon: theme.colors.textDim,
+    tabIconDefault: theme.colors.textDim,
+    tabIconSelected: theme.colors.purpleLight,
   },
-};
-
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-  },
-});
+} as const

@@ -1,6 +1,6 @@
 // UI element imports 
 
-import QuestCard from "@/components/QuestCard";
+import QuestCard from "@/components/quest/QuestCard";
 import { View } from "react-native";
 // export function to return tabs screen
 export default function QuestBoardScreen(){
