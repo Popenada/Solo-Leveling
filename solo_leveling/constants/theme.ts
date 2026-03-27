@@ -57,6 +57,13 @@ export const theme = {
       shadowOpacity: 0.4,
       shadowRadius: 10,
       elevatiob: 6,
+    },
+    red: {
+      shadowColor: '#ff4757',
+      shadowOffset: { width: 0, height: 0},
+      shadowOpacity: 0.5,
+      shadowRadius: 12,
+      elevation: 8,
     }
   }
 }

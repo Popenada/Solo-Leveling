@@ -1,7 +1,7 @@
 // Create Quest card that includes exp, workoout, type
 
+import Card from '@/components/ui/Card'
 import { Text, View } from 'react-native'
-import { useSharedValue } from 'react-native-reanimated'
 
 type QuestType = 'daily' | 'weekly' | 'special' | 'penalty'
 
@@ -31,58 +31,62 @@ const PROGRESS_COLORS = {
 }
 
 export default function QuestCard({ quest, onPress }: { quest: Quest; onPress?: (q: Quest) => void }) {
-    const scale = useSharedValue(1)
     const config = TYPE_CONFIG[quest.type]
     const isComplete = quest.progress >= 100
+    const cardVariant = quest.type === 'penalty' ? 'danger' : 'default'
 
     return (
-        <View className={`
-            flex-row items-center gap-3
-            bg-card rounded-xl p-4
-            border border-purple/20 border-l-4 ${config.border}
-            ${isComplete ? 'opacity-50' : 'opacity-100'}
-        `}>
-            <View className="flex-1 gap-1">
-                <Text className={`text-[9px] font-semibold tracking-widest font-rajdhani ${config.color}`}>
-                {config.label}
-                </Text>
+        <Card
+            variant={cardVariant}
+            onPress={onPress ? () => onPress(quest) : undefined}
+            style={{
+                opacity: isComplete ? 0.5 : 1,
+                borderLeftWidth: 4,
+                borderLeftColor: PROGRESS_COLORS[quest.type],
+            }}
+        >
+            <View className="flex-row items-center gap-3">
+                <View className="flex-1 gap-1">
+                    <Text className={`text-[9px] font-semibold tracking-widest font-rajdhani ${config.color}`}>
+                    {config.label}
+                    </Text>
 
-                <Text className={`text-[15px] font-bold text-white font-rajdhani
-                    ${isComplete ? 'line-through text-white/30' : ''}
-                    `}>
-                    {quest.title}
-                </Text>
+                    <Text className={`text-[15px] font-bold text-white font-rajdhani
+                        ${isComplete ? 'line-through text-white/30' : ''}
+                        `}>
+                        {quest.title}
+                    </Text>
 
-                <View className="flex-row items-center gap-2">
-                    <View className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
-                        <View
-                            className="h-full rounded-full"
-                            style={{
-                            width: `${quest.progress}%`,
-                            backgroundColor: PROGRESS_COLORS[quest.type],
-                        }}
-                        />
+                    <View className="flex-row items-center gap-2">
+                        <View className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+                            <View
+                                className="h-full rounded-full"
+                                style={{
+                                width: `${quest.progress}%`,
+                                backgroundColor: PROGRESS_COLORS[quest.type],
+                            }}
+                            />
+                        </View>
+                        <Text className="text-[11px] text-white/40 font-orbitron w-8 text-right">
+                            {quest.progress}%
+                        </Text>
                     </View>
-                    <Text className="text-[11px] text-white/40 font-orbitron w-8 text-right">
-                        {quest.progress}%
+                </View>
+                <View className={`
+                        px-2 py-1 rounded-md border
+                        ${quest.type === 'penalty'
+                        ? 'border-red/40 bg-red/10'
+                        : 'border-purple/30 bg-purple/10'
+                    }
+                    `}>
+                    <Text className={`text-[11px] font-bold font-orbitron
+                        ${quest.type === 'penalty' ? 'text-red' : 'text-purple-light'}
+                    `}>
+                        {quest.type === 'penalty' ? 'PENALTY' : `+${quest.xpReward} XP`}
                     </Text>
                 </View>
             </View>
-            {/* XP Badge */}
-            <View className={`
-                    px-2 py-1 rounded-md border
-                    ${quest.type === 'penalty'
-                    ? 'border-red/40 bg-red/10'
-                    : 'border-purple/30 bg-purple/10'
-                }
-                `}>
-                <Text className={`text-[11px] font-bold font-orbitron
-                    ${quest.type === 'penalty' ? 'text-red' : 'text-purple-light'}
-                `}>
-                    {quest.type === 'penalty' ? 'PENALTY' : `+${quest.xpReward} XP`}
-                </Text>
-            </View>
-        </View>
+        </Card>
 
     )
 }
