@@ -6,7 +6,7 @@ export const theme = {
     card: '#0d0d20',
 
     // accents
-    purple: '6347ff',
+    purple: '#6347ff',
     purpleLight: '#8b6fff',
     cyan: '#06d6e8',
     gold: '#f5c842',

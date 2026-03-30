@@ -2,19 +2,12 @@
 
 import QuestCard from "@/components/quest/QuestCard";
 import { View } from "react-native";
+import ProgressBar from "@/components/ui/ProgressBar";
 // export function to return tabs screen
 export default function QuestBoardScreen(){
     return (
-        <View className="flex-1 bg-bg p-4 gap-3">
-            <QuestCard quest ={{
-                id: '1',
-                type: 'daily',
-                title: '5km Morning Run',
-                icon: 'ICON',
-                progress: 60,
-                xpReward: 250,
-                completed: false,
-            }}/>
+        <View>
+            <ProgressBar progress={20}/>
         </View>
     );
 }
