@@ -5,6 +5,7 @@ import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card'
 import { theme } from '@/constants/theme';
 import CountdownTimer from '@/components/ui/CountdownTimer';
+import Badge from '@/components/ui/Badge';
 import ProgressBar from '@/components/ui/ProgressBar'
 export default function CalendarScreen() {
   const handleAddQuest = () => {};
@@ -19,6 +20,7 @@ export default function CalendarScreen() {
       </View>
       <CountdownTimer seconds={300} autoStart={true} variant="quest" onComplete={() => { console.log('Timer finished')}}/>
       <ProgressBar progress={30}/>
+      <Badge rank='A'/>
     </SafeAreaView>
   );
 }
