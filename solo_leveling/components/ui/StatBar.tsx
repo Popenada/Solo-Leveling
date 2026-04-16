@@ -1,9 +1,16 @@
 import {View, ViewStyle} from 'react-native'
-
+import ProgressBar from './ProgressBar'
+import Text from './Text'
+import { theme } from '@/constants/theme'
 type STAT_VARIANTS = 'STR' | 'AGI' | 'VIT' | 'INT'
 
 // Stats are in the form of points and bar
+interface StatProps {
+    stat: STAT_VARIANTS,
+    value: number,
+    max?: number,
 
+}
 
 // Create config for stats so types are dynamic
 const STAT_CONFIG: Record<STAT_VARIANTS, {color: string, label: string, icon: string, description: string}> = {
@@ -32,7 +39,28 @@ const STAT_CONFIG: Record<STAT_VARIANTS, {color: string, label: string, icon: st
         description: 'Nutrition, form and technique'
     }
 }
+const MAX_STAT = 100
+export default function StatBar({stat, value, max = MAX_STAT}: StatProps){
+    const cfg = STAT_CONFIG[stat]
+    const progress = Math.min((value / max) * 100, 100)
 
-export default function StatBar(){
-
+    return (
+        <View className='gap-2'>
+            <View className="flex-row items-center justify between">
+                <Text style={{
+                    fontFamily: theme.fonts.display,
+                    fontSize: 15,
+                    fontWeight: '700',
+                    color: cfg.color,
+                }}>
+                    {value}
+                </Text>
+            </View>
+            <ProgressBar
+                progress={progress}
+                color={cfg.color}
+                size="default"
+                />
+        </View>
+    )
 }

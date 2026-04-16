@@ -1,25 +1,30 @@
 // Create Quest card that includes exp, workoout, type
 
-import Card from '@/components/ui/Card'
-import { Text, View } from 'react-native'
-
+import { View, Pressable } from 'react-native'
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated'
+import * as Haptics from 'expo-haptics'
+import Text from '@/components/ui/Text'
+import ProgressBar from '@/components/ui/ProgressBar'
+import { theme } from '@/constants/theme'
+import { Quest } from '@/types/Quest'
 type QuestType = 'daily' | 'weekly' | 'special' | 'penalty'
 
-interface Quest {
-    id: string
-    type: QuestType
-    title: string
-    progress: number
-    xpReward: number
-    icon: string
-    completed: boolean
+interface Props {
+    quest: Quest,
+    onPress?:   (quest: Quest) => void
+    onComplete?: (quest: Quest) => void
 }
-
 const TYPE_CONFIG = {
-  daily:   { label: 'DAILY QUEST',   color: 'text-cyan',   border: 'border-l-cyan',   iconBg: 'bg-cyan/10'    },
-  weekly:  { label: 'WEEKLY QUEST',  color: 'text-purple', border: 'border-l-purple', iconBg: 'bg-purple/10'  },
-  special: { label: 'SPECIAL QUEST', color: 'text-gold',   border: 'border-l-gold',   iconBg: 'bg-gold/10'    },
-  penalty: { label: 'PENALTY QUEST', color: 'text-red',    border: 'border-l-red',    iconBg: 'bg-red/10'     },
+  daily:   { label: 'DAILY QUEST',   color: 'text-cyan',   border: 'border-l-cyan',   iconBg: 'bg-cyan/10', leftBar: '#06d6e8'    },
+  weekly:  { label: 'WEEKLY QUEST',  color: 'text-purple', border: 'border-l-purple', iconBg: 'bg-purple/10', leftBar: '#7F77DD'  },
+  special: { label: 'SPECIAL QUEST', color: 'text-gold',   border: 'border-l-gold',   iconBg: 'bg-gold/10', leftBar: '#f5c842'  },
+  penalty: { label: 'PENALTY QUEST', color: 'text-red',    border: 'border-l-red',    iconBg: 'bg-red/10', leftBar: '#ff4757'    },
 }
 
 // For dynamic values that Tailwind can't do, keep a small lookup
@@ -30,63 +35,55 @@ const PROGRESS_COLORS = {
   penalty: '#ff4757',
 }
 
-export default function QuestCard({ quest, onPress }: { quest: Quest; onPress?: (q: Quest) => void }) {
+export default function QuestCard({quest, onPress, onComplete}: Props) {
     const config = TYPE_CONFIG[quest.type]
-    const isComplete = quest.progress >= 100
-    const cardVariant = quest.type === 'penalty' ? 'danger' : 'default'
+    
+    const scale = useSharedValue(1)
+    const opacity = useSharedValue(1)
 
+    const handlePressIn = () => {
+        scale.value = withSpring(0.97, { damping: 15 })
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    }
+
+    const handlePressOut = () => {
+        scale.value = withSpring(1, {damping: 12})
+    }
+    const handleLongPress = () => {
+        if (quest.completed) return
+        opacity.value = withSequence(
+            withTiming(0.5, { duration: 100 }),
+            withTiming(1, {duration: 100 }),
+        )
+        
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+        onComplete?.(quest)
+    }
+    const handlePress = () => {
+        onPress?.(quest)
+    }
+    const animStyle = useAnimatedStyle(() => ({
+        transform: [{ scale: scale.value }],
+        opacity: opacity.value,
+    }))
     return (
-        <Card
-            variant={cardVariant}
-            onPress={onPress ? () => onPress(quest) : undefined}
-            style={{
-                opacity: isComplete ? 0.5 : 1,
-                borderLeftWidth: 4,
-                borderLeftColor: PROGRESS_COLORS[quest.type],
-            }}
-        >
-            <View className="flex-row items-center gap-3">
-                <View className="flex-1 gap-1">
-                    <Text className={`text-[9px] font-semibold tracking-widest font-rajdhani ${config.color}`}>
-                    {config.label}
-                    </Text>
-
-                    <Text className={`text-[15px] font-bold text-white font-rajdhani
-                        ${isComplete ? 'line-through text-white/30' : ''}
-                        `}>
-                        {quest.title}
-                    </Text>
-
-                    <View className="flex-row items-center gap-2">
-                        <View className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
-                            <View
-                                className="h-full rounded-full"
-                                style={{
-                                width: `${quest.progress}%`,
-                                backgroundColor: PROGRESS_COLORS[quest.type],
-                            }}
-                            />
-                        </View>
-                        <Text className="text-[11px] text-white/40 font-orbitron w-8 text-right">
-                            {quest.progress}%
-                        </Text>
-                    </View>
-                </View>
-                <View className={`
-                        px-2 py-1 rounded-md border
-                        ${quest.type === 'penalty'
-                        ? 'border-red/40 bg-red/10'
-                        : 'border-purple/30 bg-purple/10'
-                    }
-                    `}>
-                    <Text className={`text-[11px] font-bold font-orbitron
-                        ${quest.type === 'penalty' ? 'text-red' : 'text-purple-light'}
-                    `}>
-                        {quest.type === 'penalty' ? 'PENALTY' : `+${quest.xpReward} XP`}
-                    </Text>
-                </View>
-            </View>
-        </Card>
-
+        <Animated.View style={animStyle}>
+            <Pressable 
+                onPress={handlePress}
+                onLongPress={handleLongPress}
+                onPressIn={handlePressIn}
+                onPressOut={handlePressOut}
+                style={{
+                    backgroundColor: theme.colors.card,
+                    borderRadius: theme.radius.md, 
+                    borderWidth: 1,
+                    borderColor: theme.colors.border,
+                    borderLeftWidth: 3,
+                    borderLeftColor: config.leftBar
+                }}
+            >
+                
+            </Pressable>
+        </Animated.View>
     )
 }
