@@ -134,10 +134,10 @@ Every quest rewards one or more stats on completion.
 
 | Stat | Icon | Trained By          |
 |------|------|---------------------|
-| STR  | 💪   | Heavy lifting       |
-| AGI  | ⚡   | Cardio, speed work  |
-| VIT  | 🛡️   | Endurance, recovery |
-| INT  | 🧠   | Form, technique     |
+| STR  |  | Heavy lifting       |
+| AGI  | | Cardio, speed work  |
+| VIT  | | Endurance, recovery |
+| INT  | | Form, technique     |
 
 ### Quest Types
 
