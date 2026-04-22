@@ -1,83 +1,43 @@
-import { FlatList, Pressable, View } from 'react-native'
-import { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import Text from '@/components/ui/Text'
-import { useQuestStore } from '@/store/useQuestStore'
-import QuestCard from '@/components/quest/QuestCard'
-import { theme } from '@/constants/theme'
-import { Quest } from '@/types/Quest'
+import Text from "@/components/ui/Text"
+import { useQuestStore } from "@/store/useQuestStore"
+import { Pressable, View } from "react-native"
 
-export default function CalendarScreen() {
-  const { quests, addQuest } = useQuestStore()
-  const [tapCount, setTapCount] = useState(0)
+export default function QuestBoardScreen() {
+  const quests = useQuestStore(s => s.quests)
+  const addQuest = useQuestStore(s => s.addQuest)
 
-  const handleAddQuest = () => {
-    setTapCount(count => count + 1)
-
-    const newQuest: Quest = {
-      id: Date.now().toString(),
-      type: 'daily',
-      title: 'Complete 10 push-ups',
-      icon: '⚔️',
-      progress: 0,
-      xpReward: 25,
-      completed: false,
-      createdAt: new Date(),
-    }
-
-    addQuest(newQuest)
-  }
+  console.log('render — quests length:', quests.length)
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.bg2 }}>
-      <FlatList
-        data={quests}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{
-          flexGrow: 1,
-          padding: theme.spacing.md,
-          gap: theme.spacing.md,
+    <View style={{ flex: 1, padding: 20, gap: 16 }}>
+      
+      <Text variant="heading">Quests: {quests.length}</Text>
+
+      <Pressable
+        onPress={() => {
+          console.log('pressed')
+          addQuest({
+            id: Date.now().toString(),
+            type: 'daily',
+            title: 'Test Quest',
+            icon: '⚔️',
+            progress: 0,
+            xpReward: 100,
+            completed: false,
+            createdAt: new Date(),
+            expiresAt: new Date(),
+          })
+          console.log('after add:', useQuestStore.getState().quests.length)
         }}
-        ListHeaderComponent={
-          <View style={{ gap: theme.spacing.sm }}>
-            <Pressable
-              onPress={handleAddQuest}
-              style={{
-                backgroundColor: theme.colors.purple,
-                borderRadius: theme.radius.md,
-                paddingVertical: 14,
-                paddingHorizontal: 24,
-                alignItems: 'center',
-              }}>
-              <Text variant="label" style={{ color: '#ffffff' }}>
-                Add Quest
-              </Text>
-            </Pressable>
-            <Text variant="caption">
-              Quests loaded: {quests.length}
-            </Text>
-            <Text variant="caption">
-              Button taps: {tapCount}
-            </Text>
-          </View>
-        }
-        renderItem={({ item }) => (
-          <QuestCard quest={item} />
-        )}
-        ListEmptyComponent={
-          <View style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: theme.spacing.lg,
-          }}>
-            <Text variant="heading">No quests yet</Text>
-            <Text variant="caption" style={{ marginTop: theme.spacing.sm, textAlign: 'center' }}>
-              Tap Add Quest to create a test quest card.
-            </Text>
-          </View>
-        }
-      />
-    </SafeAreaView>
+        style={{ backgroundColor: 'purple', padding: 16, borderRadius: 8 }}
+      >
+        <Text>ADD QUEST</Text>
+      </Pressable>
+
+      {quests.map(q => (
+        <Text key={q.id}>{q.title}</Text>
+      ))}
+
+    </View>
   )
 }

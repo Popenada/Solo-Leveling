@@ -12,7 +12,7 @@ import * as Haptics from 'expo-haptics'
 import ProgressBar from '@/components/ui/ProgressBar'
 import Text from '@/components/ui/Text'
 import { theme } from '@/constants/theme'
-import { Quest } from '@/types/Quest'
+import type { Quest } from '@/types/Quest'
 
 interface Props {
     quest: Quest,

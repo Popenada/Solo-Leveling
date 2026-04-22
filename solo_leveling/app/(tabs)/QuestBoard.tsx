@@ -7,7 +7,7 @@ import Button from "@/components/ui/Button";
 import Text from "@/components/ui/Text";
 import { theme } from "@/constants/theme";
 import { useQuestStore } from "@/store/useQuestStore";
-import { Quest } from "@/types/Quest";
+import type { Quest } from "@/types/Quest";
 
 export default function QuestBoardScreen() {
   const { quests, addQuest, completeQuest } = useQuestStore();
@@ -45,6 +45,7 @@ export default function QuestBoardScreen() {
         }}
         ListHeaderComponent={
           <View style={{ gap: theme.spacing.sm }}>
+            <Text variant="heading">Quest Board</Text>
             <Button label="Add Quest" onPress={handleAddQuest} fullWidth />
             <Text variant="caption">Quests loaded: {quests.length}</Text>
             <Text variant="caption">Button taps: {tapCount}</Text>

@@ -10,16 +10,11 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="QuestBoard"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          href: null,
-        }}
-      />
       <Tabs.Screen
         name="Profile"
         options={{
