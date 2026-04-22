@@ -29,8 +29,8 @@ A gamified workout app inspired by Solo Leveling. Complete quests, earn XP, leve
 ### Install
 
 ```bash
-git clone https://github.com/yourusername/Solo-Leveling.git
-cd Solo-Leveling
+git clone https://github.com/Popenada/Solo-Leveling.git
+cd Solo-Leveling/solo_leveling
 npm install
 npx expo start
 ```

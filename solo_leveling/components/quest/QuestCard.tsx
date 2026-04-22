@@ -9,11 +9,10 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import * as Haptics from 'expo-haptics'
-import Text from '@/components/ui/Text'
 import ProgressBar from '@/components/ui/ProgressBar'
+import Text from '@/components/ui/Text'
 import { theme } from '@/constants/theme'
 import { Quest } from '@/types/Quest'
-type QuestType = 'daily' | 'weekly' | 'special' | 'penalty'
 
 interface Props {
     quest: Quest,
@@ -37,6 +36,7 @@ const PROGRESS_COLORS = {
 
 export default function QuestCard({quest, onPress, onComplete}: Props) {
     const config = TYPE_CONFIG[quest.type]
+    const progressColor = PROGRESS_COLORS[quest.type]
     
     const scale = useSharedValue(1)
     const opacity = useSharedValue(1)
@@ -79,10 +79,66 @@ export default function QuestCard({quest, onPress, onComplete}: Props) {
                     borderWidth: 1,
                     borderColor: theme.colors.border,
                     borderLeftWidth: 3,
-                    borderLeftColor: config.leftBar
+                    borderLeftColor: config.leftBar,
+                    padding: theme.spacing.md,
+                    gap: theme.spacing.md,
+                    opacity: quest.completed ? 0.65 : 1,
                 }}
             >
-                
+                <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'flex-start',
+                    gap: theme.spacing.md,
+                }}>
+                    <View style={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: theme.radius.sm,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: `${config.leftBar}1A`,
+                    }}>
+                        <Text style={{ fontSize: 22 }}>{quest.icon}</Text>
+                    </View>
+
+                    <View style={{ flex: 1, gap: theme.spacing.xs }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: theme.spacing.sm,
+                        }}>
+                            <Text variant="label" style={{ color: config.leftBar, flexShrink: 1 }}>
+                                {config.label}
+                            </Text>
+                            <Text variant="caption" style={{ color: theme.colors.gold, fontWeight: '700' }}>
+                                +{quest.xpReward} XP
+                            </Text>
+                        </View>
+
+                        <Text variant="heading" style={{
+                            color: quest.completed ? theme.colors.textDim : theme.colors.text,
+                        }}>
+                            {quest.title}
+                        </Text>
+                    </View>
+                </View>
+
+                <View style={{ gap: theme.spacing.xs }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}>
+                        <Text variant="caption">
+                            Progress
+                        </Text>
+                        <Text variant="caption" style={{ color: progressColor, fontWeight: '700' }}>
+                            {Math.round(quest.progress)}%
+                        </Text>
+                    </View>
+                    <ProgressBar progress={quest.progress} color={progressColor} />
+                </View>
             </Pressable>
         </Animated.View>
     )

@@ -1,26 +1,83 @@
+import { FlatList, Pressable, View } from 'react-native'
+import { useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import Text from '@/components/ui/Text'
+import { useQuestStore } from '@/store/useQuestStore'
+import QuestCard from '@/components/quest/QuestCard'
+import { theme } from '@/constants/theme'
+import { Quest } from '@/types/Quest'
 
-import { View, Text} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card'
-import { theme } from '@/constants/theme';
-import CountdownTimer from '@/components/ui/CountdownTimer';
-import Badge from '@/components/ui/Badge';
-import ProgressBar from '@/components/ui/ProgressBar'
 export default function CalendarScreen() {
-  const handleAddQuest = () => {};
+  const { quests, addQuest } = useQuestStore()
+  const [tapCount, setTapCount] = useState(0)
+
+  const handleAddQuest = () => {
+    setTapCount(count => count + 1)
+
+    const newQuest: Quest = {
+      id: Date.now().toString(),
+      type: 'daily',
+      title: 'Complete 10 push-ups',
+      icon: '⚔️',
+      progress: 0,
+      xpReward: 25,
+      completed: false,
+      createdAt: new Date(),
+    }
+
+    addQuest(newQuest)
+  }
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.bg2}}>
-      <View style={{ flex: 1, backgroundColor: theme.colors.bg}}>
-        CALENDAR SCREEN
-        <Button
-          label="Finish Quest"
-          onPress={handleAddQuest}
-        />
-      </View>
-      <CountdownTimer seconds={300} autoStart={true} variant="quest" onComplete={() => { console.log('Timer finished')}}/>
-      <ProgressBar progress={30}/>
-      <Badge rank='A'/>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.bg2 }}>
+      <FlatList
+        data={quests}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{
+          flexGrow: 1,
+          padding: theme.spacing.md,
+          gap: theme.spacing.md,
+        }}
+        ListHeaderComponent={
+          <View style={{ gap: theme.spacing.sm }}>
+            <Pressable
+              onPress={handleAddQuest}
+              style={{
+                backgroundColor: theme.colors.purple,
+                borderRadius: theme.radius.md,
+                paddingVertical: 14,
+                paddingHorizontal: 24,
+                alignItems: 'center',
+              }}>
+              <Text variant="label" style={{ color: '#ffffff' }}>
+                Add Quest
+              </Text>
+            </Pressable>
+            <Text variant="caption">
+              Quests loaded: {quests.length}
+            </Text>
+            <Text variant="caption">
+              Button taps: {tapCount}
+            </Text>
+          </View>
+        }
+        renderItem={({ item }) => (
+          <QuestCard quest={item} />
+        )}
+        ListEmptyComponent={
+          <View style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: theme.spacing.lg,
+          }}>
+            <Text variant="heading">No quests yet</Text>
+            <Text variant="caption" style={{ marginTop: theme.spacing.sm, textAlign: 'center' }}>
+              Tap Add Quest to create a test quest card.
+            </Text>
+          </View>
+        }
+      />
     </SafeAreaView>
-  );
+  )
 }

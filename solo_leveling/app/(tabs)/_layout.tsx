@@ -15,6 +15,12 @@ export default function TabLayout() {
         headerShown: false,
       }}>
       <Tabs.Screen
+        name="index"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="Profile"
         options={{
           title: 'Profile',

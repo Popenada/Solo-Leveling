@@ -1,6 +1,6 @@
 import { theme } from '@/constants/theme'
 import * as Haptics from 'expo-haptics'
-import { Pressable, TextStyle, ViewStyle } from 'react-native'
+import { Platform, Pressable, TextStyle, ViewStyle } from 'react-native'
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
@@ -67,7 +67,9 @@ export default function Button ({label, onPress, variant = 'primary', fullWidth,
     const handlePressIn = () => {
         scale.value = withSpring(0.96, { damping: 15 })
         opacity.value = withSpring(0.85)
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        if (Platform.OS !== 'web') {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {})
+        }
     }
 
     // Return animation values to their resting state when the press ends.
@@ -79,7 +81,7 @@ export default function Button ({label, onPress, variant = 'primary', fullWidth,
     return (
         <Animated.View style={[animStyle, fullWidth && { width: '100%'}]}>
             <Pressable
-                onPress={disabled ? undefined: onPress}
+                onPress={disabled ? undefined : onPress}
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}
                 style={[{

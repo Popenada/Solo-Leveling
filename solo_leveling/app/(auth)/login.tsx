@@ -32,7 +32,7 @@ export default function LoginScreen() {
         return;
       }
 
-      router.replace("/(tabs)");
+      router.replace("/QuestBoard");
     } catch (err: any) {
       Alert.alert("Login failed", err.message || "Something went wrong");
     } finally {
