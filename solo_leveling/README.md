@@ -32,7 +32,4 @@ The app allows users to create an account, choose a workout plan, and track fitn
 - TypeScript
 - Git and GitHub
 
----
-
-## Project Structure
 
