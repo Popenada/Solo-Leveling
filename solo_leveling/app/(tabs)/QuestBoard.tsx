@@ -13,6 +13,7 @@ export default function QuestBoardScreen() {
   const { quests, addQuest, completeQuest } = useQuestStore();
   const [tapCount, setTapCount] = useState(0);
 
+// Create populated quests for testing 
   const handleAddQuest = () => {
     setTapCount((count) => count + 1);
     console.log("button pressed");
