@@ -15,25 +15,25 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}>
-      <Tabs.Screen
-        name="Profile"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 18 }}>P</Text>,
-        }}
-      />
-      <Tabs.Screen
-        name="Calendar"
-        options={{
-          title: 'Calendar',
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 18 }}>C</Text>,
-        }}
-      />
       <Tabs.Screen 
         name="QuestBoard"
         options={{
           title: 'Quest Board',
           tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 18 }}>Q</Text>,
+        }}
+      />
+      <Tabs.Screen
+        name="Profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 18 }}>Q</Text>,
+
+        }}
+      />
+      <Tabs.Screen
+        name="Calendar"
+        options={{
+          href: null,
         }}
       />
     </Tabs>

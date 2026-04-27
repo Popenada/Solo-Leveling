@@ -1,7 +1,7 @@
-import {View, ViewStyle} from 'react-native'
+import { theme } from '@/constants/theme'
+import { View } from 'react-native'
 import ProgressBar from './ProgressBar'
 import Text from './Text'
-import { theme } from '@/constants/theme'
 type STAT_VARIANTS = 'STR' | 'AGI' | 'VIT' | 'INT'
 
 // Stats are in the form of points and bar
@@ -9,7 +9,7 @@ interface StatProps {
     stat: STAT_VARIANTS,
     value: number,
     max?: number,
-
+    icon: string,
 }
 
 // Create config for stats so types are dynamic

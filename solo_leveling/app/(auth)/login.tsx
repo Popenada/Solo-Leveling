@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { loginUser } from "./authservice";
+import { loginUser } from "@/lib/auth";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function LoginScreen() {
         return;
       }
 
-      router.replace("/QuestBoard");
+      router.replace("/(tabs)/QuestBoard");
     } catch (err: any) {
       Alert.alert("Login failed", err.message || "Something went wrong");
     } finally {

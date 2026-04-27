@@ -6,12 +6,11 @@ export const registerUser = async (
   username: string
 ) => {
   try {
-    //
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { username }
+        data: { username },
       },
     });
 
@@ -32,7 +31,7 @@ export const registerUser = async (
         email,
         username,
         exp: 0,
-        level: 1
+        level: 1,
       },
     ]);
 
@@ -46,9 +45,8 @@ export const registerUser = async (
     console.error("registerUser failed:", err?.message ?? err);
     throw err;
   }
-
-  
 };
+
 export const loginUser = async (email: string, password: string) => {
   try {
     const normalizedEmail = email.trim().toLowerCase();

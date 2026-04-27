@@ -1,9 +1,9 @@
+import HunterProfile from "@/components/player/HunterProfile";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 export default function ProfileScreen() {
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
@@ -41,12 +41,8 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 justify-center px-6 gap-4">
-        <Text className="text-3xl font-bold">Home</Text>
-        <Text className="text-lg">
-          Welcome {username || email || "Hunter"}.
-        </Text>
-        <Text className="text-gray-600">You are logged in successfully.</Text>
-
+        <HunterProfile/>
+        {/* Logout Button */}
         <Pressable
           onPress={handleLogout}
           className="mt-4 bg-red-500 rounded-lg p-4 items-center"

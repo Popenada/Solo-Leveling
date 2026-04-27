@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { registerUser } from "./authservice";
+import { registerUser } from "@/lib/auth";
 
 export default function Register() {
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function Register() {
         Alert.alert("Confirm Email", result.message);
       } else {
         Alert.alert("Success", "Account created!");
-        router.replace("/Profile");
+        router.replace("/(tabs)/Profile");
       }
     } catch (err: any) {
       Alert.alert("Registration failed", err.message || "Something went wrong");
