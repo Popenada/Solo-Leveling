@@ -197,7 +197,7 @@ export default function HunterProfile() {
           <Divider/>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={{ fontSize: 22 }}>ICON</Text>
+              <Text style={{ fontSize: 22 }}>Stats</Text>
                 <Text style={{
                   fontFamily: theme.fonts.display,
                   fontSize: 18,
@@ -217,6 +217,26 @@ export default function HunterProfile() {
                 Day Streak
               </Text>
             </View>
+        </View>
+
+        {/* Total Workouts */}
+        <View style={{ alignItems: 'flex-end'}}>
+          <Text style={{
+            fontFamily: theme.fonts.display,
+            fontSize: 18,
+            fontWeight: '900',
+            color: theme.colors.cyan,
+          }}>
+            {totalWorkouts}
+          </Text>
+          <Text style={{
+            fontFamily: theme.fonts.display,
+            fontSize: 9,
+            color: theme.colors.textDim,
+            letterSpacing: 1,
+          }}>
+            TOTAL WORKOUTS
+          </Text>
         </View>
     </View>
   )

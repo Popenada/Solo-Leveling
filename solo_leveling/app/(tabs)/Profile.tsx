@@ -22,7 +22,7 @@ export default function ProfileScreen() {
 
       setEmail(session.user.email ?? null);
       setUsername((session.user.user_metadata?.username as string) ?? null);
-    };
+    }
 
     loadUser();
   }, [router]);

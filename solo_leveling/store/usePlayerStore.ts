@@ -1,6 +1,6 @@
+// Player zustand storage for stats, levels, streak, and xp
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-
 type Rank = 'E' | 'D' | 'C' | 'B' | 'A' | 'S'
 
 interface Stats {
@@ -39,10 +39,10 @@ export const usePlayerStore = create<PlayerStore>()(
             xpToNextLevel: XP_FOR_LEVEL(1),
             rank: 'E',
             stats: {
-                strength: 10,
-                agility: 10,
-                vitality: 10,
-                intelligence: 10
+                strength: 50,
+                agility: 30,
+                vitality: 30,
+                intelligence: 30,
             },
             streak: 0,
             totalWorkouts: 0,

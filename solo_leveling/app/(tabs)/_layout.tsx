@@ -15,13 +15,6 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}>
-      <Tabs.Screen 
-        name="QuestBoard"
-        options={{
-          title: 'Quest Board',
-          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 18 }}>Q</Text>,
-        }}
-      />
       <Tabs.Screen
         name="Profile"
         options={{
@@ -30,6 +23,14 @@ export default function TabLayout() {
 
         }}
       />
+      <Tabs.Screen 
+        name="QuestBoard"
+        options={{
+          title: 'Quest Board',
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 18 }}>Q</Text>,
+        }}
+      />
+      
       <Tabs.Screen
         name="Calendar"
         options={{
