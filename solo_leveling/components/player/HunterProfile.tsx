@@ -14,36 +14,34 @@ import Divider from '../ui/Divider'
 import ProgressBar from '../ui/ProgressBar'
 import Rank from '../ui/Rank'
 import StatBar from '../ui/StatBar'
+import StatGraph from './StatGraph'
+
 export default function HunterProfile() {
    const{
-    name, 
-    level, 
-    xp, 
+    name,
+    level,
+    xp,
     xpToNextLevel,
-    rank, 
+    rank,
     stats,
-    streak, 
+    streak,
     totalWorkouts,
    } = usePlayerStore()
 
-   // avatar ring rotation
    const ringRotate = useSharedValue(0)
-
-   // xp shimmer effect
    const shimmer = useSharedValue(0)
 
    useEffect(() => {
     ringRotate.value = withRepeat(
       withTiming(360, { duration: 8000 }),
-      -1 // infinite
+      -1
     )
-
-   shimmer.value = withRepeat(
-    withSequence(
-      withTiming(1, { duration: 1800 }),
-      withTiming(0, { duration: 0}),
-    ), -1
-   )
+    shimmer.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1800 }),
+        withTiming(0, { duration: 0 }),
+      ), -1
+    )
   }, [])
 
   const ringStyle = useAnimatedStyle(() => ({
@@ -60,7 +58,6 @@ export default function HunterProfile() {
       borderColor: theme.colors.borderBright,
       padding: theme.spacing.md,
       gap: theme.spacing.md,
-      // purple glow
       shadowColor: theme.colors.purple,
       shadowOffset: { width: 0, height: 0 },
       shadowOpacity: 0.3,
@@ -68,10 +65,10 @@ export default function HunterProfile() {
       elevation: 8,
       overflow: 'hidden',
     }}>
-      {/* header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14}}>
-        {/* avatar */}
-        <View style={{ position: 'relative', width: 58, height: 58}}>
+
+      {/* Header */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+        <View style={{ position: 'relative', width: 58, height: 58 }}>
           <View style={{
             width: 58, height: 58,
             borderRadius: 14,
@@ -87,7 +84,6 @@ export default function HunterProfile() {
           }}>
             <Text style={{ fontSize: 28 }}>Insert ICON here</Text>
           </View>
-          {/* spinning ring */}
           <Animated.View style={[ringStyle, {
             position: 'absolute',
             inset: -5,
@@ -97,8 +93,8 @@ export default function HunterProfile() {
             borderStyle: 'dashed',
           }]} />
         </View>
-        {/* Name, Title, and Rank */}
-        <View style={{ flex: 1, gap: 3}}>
+
+        <View style={{ flex: 1, gap: 3 }}>
           <Text style={{
             fontFamily: theme.fonts.display,
             fontSize: 15,
@@ -109,17 +105,16 @@ export default function HunterProfile() {
             {name.toUpperCase()}
           </Text>
           <Text style={{
-            fontFamily:theme.fonts.body, 
+            fontFamily: theme.fonts.body,
             fontSize: 12,
             color: theme.colors.purpleLight,
             letterSpacing: 1,
           }}>
             Shadow Monarch
           </Text>
-          <Rank rank={rank} size="sm"/>
+          <Rank rank={rank} size="sm" />
         </View>
 
-        {/* level */}
         <View style={{ alignItems: 'flex-end', gap: 2 }}>
           <Text style={{
             fontFamily: theme.fonts.display,
@@ -142,8 +137,8 @@ export default function HunterProfile() {
           </Text>
         </View>
       </View>
-      
-      {/* xp bar */}
+
+      {/* XP Bar */}
       <View style={{ gap: 6 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={{
@@ -162,65 +157,66 @@ export default function HunterProfile() {
             {xp.toLocaleString()} / {xpToNextLevel.toLocaleString()} XP
           </Text>
         </View>
-
         <ProgressBar
           progress={xpProg}
           color={theme.colors.cyan}
           size="thick"
           showShimmer
         />
-
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{
-              fontFamily: theme.fonts.display,
-              fontSize: 9,
-              color: theme.colors.textDim,
-            }}>
-              LVL. {level}
-            </Text>
-            <Text style={{
-              fontFamily: theme.fonts.display,
-              fontSize: 9,
-              color: theme.colors.textDim,
-            }}>
-              LVL. {level + 1}
-            </Text>
-            {/* stats */}
-            <View style={{ gap: 10 }}>
-              <StatBar stat="STR" value={stats.strength}     icon="ICON" />
-              <StatBar stat="AGI" value={stats.agility}      icon="ICON" />
-              <StatBar stat="VIT" value={stats.vitality}     icon="ICON" />
-              <StatBar stat="INT" value={stats.intelligence} icon="ICON" />
-            </View>
-          </View>
-
-          <Divider/>
-
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={{ fontSize: 22 }}>Stats</Text>
-                <Text style={{
-                  fontFamily: theme.fonts.display,
-                  fontSize: 18,
-                  fontWeight: '900',
-                  color: '#ff6b35',
-                  textShadowColor: 'rgba(255,107,53,0.5)',
-                  textShadowRadius: 8,
-                }}>
-              {streak}
-            </Text>
-              <Text style={{
-                fontFamily: theme.fonts.display,
-                fontSize: 9,
-                color: theme.colors.textDim,
-                letterSpacing: 1,
-              }}>
-                Day Streak
-              </Text>
-            </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontFamily: theme.fonts.display, fontSize: 9, color: theme.colors.textDim }}>
+            LVL. {level}
+          </Text>
+          <Text style={{ fontFamily: theme.fonts.display, fontSize: 9, color: theme.colors.textDim }}>
+            LVL. {level + 1}
+          </Text>
         </View>
+      </View>
 
-        {/* Total Workouts */}
-        <View style={{ alignItems: 'flex-end'}}>
+      <Divider />
+
+      {/* Stats section */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md }}>
+        <StatGraph
+          strength={stats.strength}
+          agility={stats.agility}
+          vitality={stats.vitality}
+          intelligence={stats.intelligence}
+          size={160}
+        />
+        <View style={{ flex: 1, gap: theme.spacing.xs }}>
+          <StatBar stat="STR" value={stats.strength} icon="ICON" size="sm" />
+          <StatBar stat="AGI" value={stats.agility} icon="ICON" size="sm" />
+          <StatBar stat="VIT" value={stats.vitality} icon="ICON" size="sm" />
+          <StatBar stat="INT" value={stats.intelligence} icon="ICON" size="sm" />
+        </View>
+      </View>
+
+      <Divider />
+
+      {/* Streak + Total Workouts */}
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{
+            fontFamily: theme.fonts.display,
+            fontSize: 18,
+            fontWeight: '900',
+            color: '#ff6b35',
+            textShadowColor: 'rgba(255,107,53,0.5)',
+            textShadowRadius: 8,
+          }}>
+            {streak}
+          </Text>
+          <Text style={{
+            fontFamily: theme.fonts.display,
+            fontSize: 9,
+            color: theme.colors.textDim,
+            letterSpacing: 1,
+          }}>
+            DAY STREAK
+          </Text>
+        </View>
+        <View style={{ alignItems: 'center' }}>
           <Text style={{
             fontFamily: theme.fonts.display,
             fontSize: 18,
@@ -238,6 +234,8 @@ export default function HunterProfile() {
             TOTAL WORKOUTS
           </Text>
         </View>
+      </View>
+
     </View>
   )
 }

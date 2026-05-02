@@ -10,6 +10,7 @@ interface StatProps {
     value: number,
     max?: number,
     icon: string,
+    size?: 'sm' | 'md'
 }
 
 // Create config for stats so types are dynamic
@@ -40,18 +41,27 @@ const STAT_CONFIG: Record<STAT_VARIANTS, {color: string, label: string, icon: st
     }
 }
 const MAX_STAT = 100
-export default function StatBar({stat, value, max = MAX_STAT}: StatProps){
+export default function StatBar({stat, value, max = MAX_STAT, size = 'md'}: StatProps){
     const cfg = STAT_CONFIG[stat]
     const progress = Math.min((value / max) * 100, 100)
+    const isSm = size === 'sm'
 
     return (
-        <View className='gap-2'>
-            <View className="flex-row items-center justify between">
+        <View style={{ gap: isSm ? 2 : 4 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{
                     fontFamily: theme.fonts.display,
-                    fontSize: 15,
+                    fontSize: isSm ? 9 : 11,
                     fontWeight: '700',
                     color: cfg.color,
+                    letterSpacing: 1,
+                }}>
+                    {stat}
+                </Text>
+                <Text style={{
+                    fontFamily: theme.fonts.display,
+                    fontSize: isSm ? 9 : 11,
+                    color: theme.colors.textDim,
                 }}>
                     {value}
                 </Text>
@@ -59,8 +69,8 @@ export default function StatBar({stat, value, max = MAX_STAT}: StatProps){
             <ProgressBar
                 progress={progress}
                 color={cfg.color}
-                size="default"
-                />
+                size={isSm ? 'thin' : 'default'}
+            />
         </View>
     )
 }

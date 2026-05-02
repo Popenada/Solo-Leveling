@@ -5,12 +5,12 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import "../global.css";
+import LevelUpEffect from '@/components/effects/LevelUp';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [ready, setReady] = useState(false)
   useEffect(() => {
-    // give store time to initialize
     setTimeout(() => setReady(true), 100)
   }, [])
   return (
@@ -20,8 +20,9 @@ export default function RootLayout() {
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal", title: "Modal" }} />
-        </Stack>
-        <StatusBar style="auto" />
+      </Stack>
+      <LevelUpEffect />
+      <StatusBar style="auto" />
     </ThemeProvider>
   );
 }

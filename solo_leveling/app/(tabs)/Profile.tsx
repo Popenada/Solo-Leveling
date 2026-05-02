@@ -1,14 +1,16 @@
 import HunterProfile from "@/components/player/HunterProfile";
 import { supabase } from "@/lib/supabase";
+import { usePlayerStore } from "@/store/usePlayerStore";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 export default function ProfileScreen() {
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-
+  const { addXP, xp, xpToNextLevel, levelUp } = usePlayerStore()
   useEffect(() => {
     const loadUser = async () => {
       const {
@@ -48,6 +50,9 @@ export default function ProfileScreen() {
           className="mt-4 bg-red-500 rounded-lg p-4 items-center"
         >
           <Text className="text-white font-semibold">Logout</Text>
+        </Pressable>
+        <Pressable onPress={() => addXP(xpToNextLevel - xp)}>
+          <Text>Force Level Up</Text>
         </Pressable>
       </View>
     </SafeAreaView>

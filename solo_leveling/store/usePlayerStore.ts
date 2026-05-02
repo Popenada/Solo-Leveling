@@ -1,6 +1,7 @@
 // Player zustand storage for stats, levels, streak, and xp
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 type Rank = 'E' | 'D' | 'C' | 'B' | 'A' | 'S'
 
 interface Stats {
@@ -18,10 +19,12 @@ interface PlayerStore {
     stats: Stats
     streak: number
     totalWorkouts: number
+    triggerLevelUp: boolean
 
     addXP: (amount: number) => void
     addStats: (rewards: Partial<Record<'STR'|'AGI'|'VIT'|'INT', number>>) => void
     levelUp: () => void
+    clearLevelUp: () => void
     rankUp: (rank: Rank) => void
     addStreak: () => void
     resetStreak: () => void
@@ -35,7 +38,7 @@ export const usePlayerStore = create<PlayerStore>()(
         (set, get) => ({
             name: 'Hunter',
             level: 1,
-            xp: 1,
+            xp: 100,
             xpToNextLevel: XP_FOR_LEVEL(1),
             rank: 'E',
             stats: {
@@ -46,13 +49,17 @@ export const usePlayerStore = create<PlayerStore>()(
             },
             streak: 0,
             totalWorkouts: 0,
+            triggerLevelUp: false,
 
             addXP: (amount) => {
-                const {xp, xpToNextLevel, levelUp } = get()
+                const { xp, xpToNextLevel, levelUp } = get()
                 const newXP = xp + amount
 
                 if (newXP >= xpToNextLevel) {
                     levelUp()
+                    // If leveled up, carry remainder of XP to next level
+                    const expOverflow = newXP - xpToNextLevel
+                    if (expOverflow > 0) get().addXP(expOverflow)
                 } else {
                     set({ xp: newXP })
                 }
@@ -73,8 +80,11 @@ export const usePlayerStore = create<PlayerStore>()(
                     level: newLevel,
                     xp: 0,
                     xpToNextLevel: XP_FOR_LEVEL(newLevel),
+                    triggerLevelUp: true,
                 }
             }),
+
+            clearLevelUp: () => set({ triggerLevelUp: false }),
 
             rankUp: (rank) => set({ rank }),
 
@@ -85,6 +95,6 @@ export const usePlayerStore = create<PlayerStore>()(
 
             resetStreak: () => set({ streak: 0 }),
         }),
-        { name: 'player-storage'}
+        { name: 'player-storage', storage: createJSONStorage(() => AsyncStorage) }
     )
 )
