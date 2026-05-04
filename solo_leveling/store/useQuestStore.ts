@@ -1,18 +1,21 @@
 // Import zustand for global use for components
 // Global data to be accessed include completed, adding quest, 
+import { TEST_QUESTS } from '@/constants/quests'
 import { Quest } from '@/types/Quest'
 import { create } from 'zustand'
-
 interface QuestStore {
-  quests: Quest[]
+  quests: Quest[],
   addQuest: (quest: Quest) => void
   completeQuest: (id: string) => void
   updateQuestProgress: (id: string, progress: number) => void
   dailyResetQuests: () => void
 }
-// Create quest store to create what functions for quest 
+// Create quest store to create what functions for quest
+// Populate array quest data type with constant
 export const useQuestStore = create<QuestStore>()((set) => ({
-  quests: [],
+  // Added test_quest population from quests constant
+  quests: TEST_QUESTS,
+  // Adds quest id from quest constant
   addQuest: (quest) => {
     console.log('addQuest called', quest.title)
     set(state => {

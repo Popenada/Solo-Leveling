@@ -1,7 +1,8 @@
 // app/quest/[id].tsx
-import { View } from 'react-native'
-import { useLocalSearchParams } from 'expo-router'
+// Modal UI from quests
 import Text from '@/components/ui/Text'
+import { useLocalSearchParams } from 'expo-router'
+import { View } from 'react-native'
 
 export default function QuestDetail() {
   const { id } = useLocalSearchParams()

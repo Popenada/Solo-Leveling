@@ -1,18 +1,19 @@
 // Create Quest card that includes exp, workoout, type
 
-import { View, Pressable } from 'react-native'
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withSequence,
-  withTiming,
-} from 'react-native-reanimated'
-import * as Haptics from 'expo-haptics'
 import ProgressBar from '@/components/ui/ProgressBar'
 import Text from '@/components/ui/Text'
 import { theme } from '@/constants/theme'
 import type { Quest } from '@/types/Quest'
+import * as Haptics from 'expo-haptics'
+import { router } from 'expo-router'
+import { Pressable, View } from 'react-native'
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withSequence,
+    withSpring,
+    withTiming,
+} from 'react-native-reanimated'
 
 interface Props {
     quest: Quest,
@@ -60,7 +61,9 @@ export default function QuestCard({quest, onPress, onComplete}: Props) {
         onComplete?.(quest)
     }
     const handlePress = () => {
-        onPress?.(quest)
+        console.log('pushing id: ', quest.id)
+        // Quest fetches quest.id from addQuest that generates the id
+        router.push(`/workout/${quest.id}`)
     }
     const animStyle = useAnimatedStyle(() => ({
         transform: [{ scale: scale.value }],
