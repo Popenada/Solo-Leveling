@@ -61,7 +61,7 @@ export default function QuestCard({quest, onPress, onComplete}: Props) {
         onComplete?.(quest)
     }
     const handlePress = () => {
-        console.log('pushing id: ', quest.id)
+        //console.log('pushing id: ', quest.id)
         // Quest fetches quest.id from addQuest that generates the id
         router.push(`/workout/${quest.id}`)
     }

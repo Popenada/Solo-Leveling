@@ -13,7 +13,8 @@ export const WORKOUTS: Workout[] = [
             { name: 'Diamond Push-ups', sets: 2, reps: 15, restSeconds: 45 },
             { name: ' ', sets: 2, reps: 10, restSeconds: 2},
         ],
-        statRewards: { strength: 2, intelligence: 4, vitality: 2}
+        statRewards: { STR: 2, INT: 4, VIT: 2},
+        xpReward: 50
     },
     {
         id: 'workout-1',
@@ -25,7 +26,8 @@ export const WORKOUTS: Workout[] = [
             { name: 'Diamond Push-ups', sets: 2, reps: 15, restSeconds: 45 },
             { name: ' ', sets: 2, reps: 10, restSeconds: 2},
         ],
-        statRewards: { strength: 2, intelligence: 4, vitality: 2}
+        statRewards: { STR: 2, INT: 4, VIT: 2},
+        xpReward: 50
     },
     {
     id: 'workout-1',
@@ -37,7 +39,8 @@ export const WORKOUTS: Workout[] = [
             { name: 'Diamond Push-ups', sets: 2, reps: 15, restSeconds: 45 },
             { name: ' ', sets: 2, reps: 10, restSeconds: 2},
         ],
-        statRewards: { strength: 2, intelligence: 4, vitality: 2}
+        statRewards: { STR: 2, INT: 4, VIT: 2},
+        xpReward: 50
     },
     {
         id: 'workout-1',
@@ -49,6 +52,8 @@ export const WORKOUTS: Workout[] = [
             { name: 'Diamond Push-ups', sets: 2, reps: 15, restSeconds: 45 },
             { name: ' ', sets: 2, reps: 10, restSeconds: 2},
         ],
-        statRewards: { strength: 2, intelligence: 4, vitality: 2}
+        statRewards: { STR: 2, INT: 4, VIT: 2},
+        xpReward: 50
+
     },
 ]

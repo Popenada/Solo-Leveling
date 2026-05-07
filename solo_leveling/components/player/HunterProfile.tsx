@@ -25,7 +25,7 @@ export default function HunterProfile() {
     rank,
     stats,
     streak,
-    totalWorkouts,
+    totalQuestsCompleted,
    } = usePlayerStore()
 
    const ringRotate = useSharedValue(0)
@@ -216,6 +216,8 @@ export default function HunterProfile() {
             DAY STREAK
           </Text>
         </View>
+
+        {/* DISPLAY TOTAL QUESTS COMPLETED */}
         <View style={{ alignItems: 'center' }}>
           <Text style={{
             fontFamily: theme.fonts.display,
@@ -223,15 +225,14 @@ export default function HunterProfile() {
             fontWeight: '900',
             color: theme.colors.cyan,
           }}>
-            {totalWorkouts}
+            {totalQuestsCompleted}
           </Text>
           <Text style={{
-            fontFamily: theme.fonts.display,
             fontSize: 9,
             color: theme.colors.textDim,
             letterSpacing: 1,
           }}>
-            TOTAL WORKOUTS
+            QUESTS COMPLETED
           </Text>
         </View>
       </View>

@@ -1,7 +1,7 @@
 // Player zustand storage for stats, levels, streak, and xp
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 type Rank = 'E' | 'D' | 'C' | 'B' | 'A' | 'S'
 
 interface Stats {
@@ -18,7 +18,7 @@ interface PlayerStore {
     rank: Rank
     stats: Stats
     streak: number
-    totalWorkouts: number
+    totalQuestsCompleted: number
     triggerLevelUp: boolean
 
     addXP: (amount: number) => void
@@ -28,6 +28,7 @@ interface PlayerStore {
     rankUp: (rank: Rank) => void
     addStreak: () => void
     resetStreak: () => void
+    addQuestCount: () => void
 }
 
 const XP_FOR_LEVEL = (level: number) => 
@@ -50,6 +51,7 @@ export const usePlayerStore = create<PlayerStore>()(
             streak: 0,
             totalWorkouts: 0,
             triggerLevelUp: false,
+            totalQuestsCompleted: 0,
 
             addXP: (amount) => {
                 const { xp, xpToNextLevel, levelUp } = get()
@@ -90,9 +92,11 @@ export const usePlayerStore = create<PlayerStore>()(
 
             addStreak: () => set(state => ({
                 streak: state.streak + 1,
-                totalWOrkouts: state.totalWorkouts + 1,
             })),
-
+            // Total workout function that sets state using zustand and updates the total quests completed
+            addQuestCount: () => set(state => ({
+                totalQuestsCompleted: state.totalQuestsCompleted + 1
+            })),
             resetStreak: () => set({ streak: 0 }),
         }),
         { name: 'player-storage', storage: createJSONStorage(() => AsyncStorage) }

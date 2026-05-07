@@ -1,19 +1,34 @@
 // Pop up modal that uses data from workout database
+import ProgressBar from "@/components/ui/ProgressBar";
 import Text from "@/components/ui/Text";
 import { theme } from "@/constants/theme";
 import { WORKOUTS } from "@/constants/workouts";
+import { usePlayerStore } from "@/store/usePlayerStore";
+import { useQuestStore } from "@/store/useQuestStore";
 import { useLocalSearchParams } from "expo-router";
+import { useState } from "react";
 import { Pressable, ScrollView, View } from 'react-native';
 export default function WorkoutDetail() {
+    const [started, setStarted] = useState(false)
+
+    // Declare UsePlayerStore functions to add stats on completion of quests
+    const addStats = usePlayerStore(s => s.addStats)
+    const addXP = usePlayerStore(s => s.addXP)
+    const addQuestCount = usePlayerStore(s => s.addQuestCount)
+    // Declare UseQuestStore functions to be passed into component of modal
+    const completeQuest = useQuestStore(s => s.completeQuest)
+    const updateQuestProgress = useQuestStore(s => s.updateQuestProgress)
+    const [completedExercises, setCompletedExercises] = useState<Set<number>>(new Set())
     // Looks up quest id from url when router.push({quest.id}) is passed to url
     // Take id from url
     const { id } = useLocalSearchParams()
-    console.log('workout id received:', id)
-
+    // After quest id is identified, map the questid to the workout id
+    // WORKSOUTS is temporary constant file for testing 
+    // Change when in production for API calls instead
     const workout = WORKOUTS.find(w => w.questId === id)
-    console.log('workout found:', workout)
 
     if (!workout) return <View style={{flex:1, backgroundColor: 'red'}}><Text>not found: {String(id)}</Text></View>
+    const progress = (completedExercises.size / workout.exercises.length) * 100
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: theme.colors.bg }}>
@@ -24,7 +39,7 @@ export default function WorkoutDetail() {
                     <Text variant="label" style={{ color: theme.colors.purple}}>
                         RANK {workout.difficulty}
                     </Text>
-                    <Text variant="heading">{workout.timeRemaining} MINUTES REMAINING</Text>
+                    <Text variant="heading">{workout.timeRemaining} MINUTES ESTIMATED</Text>
                 </View>
 
                 {/* Exercises */}
@@ -44,29 +59,88 @@ export default function WorkoutDetail() {
                     </Text>
                     </View>
                 ))}
-
+                
                 {/* Stat Rewards */}
                 <View style={{ gap: theme.spacing.xs }}>
                     <Text variant="label" style={{ color: theme.colors.gold }}>STAT REWARDS</Text>
-                        {workout.statRewards.strength && (
-                    <Text variant="caption">STR +{workout.statRewards.strength}</Text>
+                        {workout.statRewards.STR && (
+                    <Text variant="caption">STR +{workout.statRewards.STR}</Text>
                 )}
-                    {workout.statRewards.agility && (
-                    <Text variant="caption">AGI +{workout.statRewards.agility}</Text>
+                    {workout.statRewards.AGI && (
+                    <Text variant="caption">AGI +{workout.statRewards.AGI}</Text>
                 )}
-                    {workout.statRewards.vitality && (
-                    <Text variant="caption">END +{workout.statRewards.vitality}</Text>
+                    {workout.statRewards.INT && (
+                    <Text variant="caption">END +{workout.statRewards.AGI}</Text>
                 )}
                 </View>
-                {/* Begin Button */}
-                <Pressable onPress={() => {}} style={{
-                    backgroundColor: theme.colors.purple,
-                    borderRadius: theme.radius.md,
-                    padding: theme.spacing.md,
-                    alignItems: 'center',
-                }}>
-                <Text variant="heading" style={{ color: theme.colors.text }}>BEGIN MISSION</Text>
-                </Pressable>
+                
+                {/* Begin / Checklist */}
+                {started ? (
+                    <View style={{ gap: theme.spacing.md }}>
+                        <ProgressBar progress={progress} color={theme.colors.purple} />
+                        {workout.exercises.map((ex, i) => (
+                            <Pressable
+                                key={i}
+                                onPress={() => {
+                                    setCompletedExercises(prev => {
+                                        const next = new Set(prev)
+                                        next.has(i) ? next.delete(i) : next.add(i)
+                                        const newProgress = (next.size / workout.exercises.length) * 100
+                                        setTimeout(() => updateQuestProgress(id as string, newProgress), 0)
+                                        return next
+                                    })
+                                }}
+                                style={{
+                                    backgroundColor: theme.colors.card,
+                                    borderRadius: theme.radius.md,
+                                    borderWidth: 1,
+                                    borderColor: completedExercises.has(i) ? theme.colors.purple : theme.colors.border,
+                                    padding: theme.spacing.md,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    gap: theme.spacing.md,
+                                }}
+                            >
+                                <Text style={{ color: completedExercises.has(i) ? theme.colors.purple : theme.colors.textDim }}>
+                                    {completedExercises.has(i) ? '✓' : '○'}
+                                </Text>
+                                <Text variant="heading">{ex.name}</Text>
+                            </Pressable>
+                        ))}
+                        {progress === 100 && (
+                            <Pressable
+                                onPress={() => {
+                                    addStats({
+                                        STR: workout.statRewards.STR,
+                                        AGI: workout.statRewards.AGI,
+                                        INT: workout.statRewards.INT,
+                                        VIT: workout.statRewards.VIT,
+                                    })
+                                    addXP(workout.xpReward)
+                                    completeQuest(id as string)
+                                    addQuestCount()
+                                }}
+                                style={{
+                                    backgroundColor: theme.colors.gold,
+                                    borderRadius: theme.radius.md,
+                                    padding: theme.spacing.md,
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Text variant="heading" style={{ color: theme.colors.bg }}>COMPLETE MISSION</Text>
+                            </Pressable>
+                        )}
+                    </View>
+                ) : (
+                    <Pressable onPress={() => setStarted(true)} style={{
+                        backgroundColor: theme.colors.purple,
+                        borderRadius: theme.radius.md,
+                        padding: theme.spacing.md,
+                        alignItems: 'center',
+                    }}>
+                        <Text variant="heading" style={{ color: theme.colors.text }}>BEGIN MISSION</Text>
+                    </Pressable>
+                )}
             </View>
         </ScrollView>
     )

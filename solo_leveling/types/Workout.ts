@@ -15,9 +15,10 @@ export interface Workout {
     exercises: Exercise[]
     timeRemaining: number
     statRewards: {
-        strength?: number
-        agility?: number
-        vitality?: number
-        intelligence?: number
+        STR?: number
+        AGI?: number
+        VIT?: number
+        INT?: number
     }
+    xpReward: number
 }

@@ -27,10 +27,11 @@ export const useQuestStore = create<QuestStore>()((set) => ({
   completeQuest: (id) => set(state => ({
     quests: state.quests.map(q => q.id === id ? {...q, completed: true, progress: 100} : q)
   })),
+
   // Update quest progress
   // Set completed to true if progress is 100 or more percent wise
   updateQuestProgress: (id, progress) => set(state => ({
-    quests: state.quests.map(q => q.id == id ? {...q, completed: progress <= 100}: q )
+    quests: state.quests.map(q => q.id === id ? {... q, progress} : q)
   })),
   // Wipe daily quests
   dailyResetQuests: () => set (state => ({
