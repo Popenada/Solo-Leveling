@@ -2,15 +2,18 @@
 import ProgressBar from "@/components/ui/ProgressBar";
 import Text from "@/components/ui/Text";
 import { theme } from "@/constants/theme";
-import { WORKOUTS } from "@/constants/workouts";
+import { saveHunterProfile } from "@/lib/hunter";
+import { supabase } from "@/lib/supabase";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { useQuestStore } from "@/store/useQuestStore";
+import { useWorkoutStore } from "@/store/useWorkoutStore";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, View } from 'react-native';
 export default function WorkoutDetail() {
     const [started, setStarted] = useState(false)
 
+    
     // Declare UsePlayerStore functions to add stats on completion of quests
     const addStats = usePlayerStore(s => s.addStats)
     const addXP = usePlayerStore(s => s.addXP)
@@ -19,18 +22,17 @@ export default function WorkoutDetail() {
     const completeQuest = useQuestStore(s => s.completeQuest)
     const updateQuestProgress = useQuestStore(s => s.updateQuestProgress)
     const [completedExercises, setCompletedExercises] = useState<Set<number>>(new Set())
-    // Looks up quest id from url when router.push({quest.id}) is passed to url
-    // Take id from url
+
+    // Store workout by retrieving and calling function to identify quest id to hardcoded constant quests
+    const getWorkoutByQuestId = useWorkoutStore(s => s.getWorkoutByQuestId)
     const { id } = useLocalSearchParams()
-    // After quest id is identified, map the questid to the workout id
-    // WORKSOUTS is temporary constant file for testing 
-    // Change when in production for API calls instead
-    const workout = WORKOUTS.find(w => w.questId === id)
+    const workout = getWorkoutByQuestId(id as string)
 
     if (!workout) return <View style={{flex:1, backgroundColor: 'red'}}><Text>not found: {String(id)}</Text></View>
     const progress = (completedExercises.size / workout.exercises.length) * 100
 
     return (
+        
         <ScrollView style={{ flex: 1, backgroundColor: theme.colors.bg }}>
             <View style={{ padding: theme.spacing.lg, gap: theme.spacing.lg }}>
 
@@ -111,7 +113,7 @@ export default function WorkoutDetail() {
                         {/* Complete Button */}
                         {progress === 100 && (
                             <Pressable
-                                onPress={() => {
+                                onPress={async () => {
                                     addStats({
                                         STR: workout.statRewards.STR,
                                         AGI: workout.statRewards.AGI,
@@ -121,6 +123,10 @@ export default function WorkoutDetail() {
                                     addXP(workout.xpReward)
                                     completeQuest(id as string)
                                     addQuestCount()
+                                    // Declare state of player using usePlayerStore
+                                    const state = usePlayerStore.getState()
+                                    const { data: { user } } = await supabase.auth.getUser()
+                                    await saveHunterProfile(user!.id, state)
                                     router.back()
                                 }}
                                 style={{

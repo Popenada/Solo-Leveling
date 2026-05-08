@@ -1,36 +1,64 @@
 import QuestList from "@/components/quest/QuestList";
+import CreateQuestModal from "@/components/quest/CreateQuestModal";
+import Text from "@/components/ui/Text";
+import { theme } from "@/constants/theme";
+import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useQuestStore } from "@/store/useQuestStore";
-import Text from "@/components/ui/Text";
 
 export default function QuestBoardScreen() {
-  const addQuest = useQuestStore(s => s.addQuest);
-
-  const handleAddTestQuest = () => {
-    addQuest({
-      id: Date.now().toString(),
-      type: 'daily',
-      title: 'Test Quest',
-      icon: '⚔️',
-      progress: 0,
-      xpReward: 100,
-      completed: false,
-      createdAt: new Date(),
-    });
-  };
+  const [modalVisible, setModalVisible] = useState(false)
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#111" }}>
-      <QuestList />
-      <View style={{ padding: 16 }}>
-        <Pressable
-          onPress={handleAddTestQuest}
-          style={{ backgroundColor: '#06d6e8', borderRadius: 8, padding: 14, alignItems: 'center' }}
-        >
-          <Text style={{ color: '#000', fontWeight: '700' }}>+ Add Test Quest</Text>
-        </Pressable>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.bg }}>
+      <View style={{ flex: 1 }}>
+
+        {/* Header */}
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: theme.spacing.md,
+          paddingBottom: 0,
+        }}>
+          <Text style={{
+            fontFamily: theme.fonts.display,
+            fontSize: 16,
+            fontWeight: '700',
+            color: theme.colors.text,
+            letterSpacing: 2,
+          }}>
+            QUEST BOARD
+          </Text>
+          <Pressable
+            onPress={() => setModalVisible(true)}
+            style={{
+              backgroundColor: theme.colors.purple,
+              borderRadius: theme.radius.sm,
+              paddingHorizontal: theme.spacing.md,
+              paddingVertical: theme.spacing.sm,
+              ...theme.shadows.purple,
+            }}
+          >
+            <Text style={{
+              fontFamily: theme.fonts.display,
+              fontSize: 12,
+              fontWeight: '700',
+              color: theme.colors.text,
+              letterSpacing: 1,
+            }}>
+              + NEW
+            </Text>
+          </Pressable>
+        </View>
+
+        <QuestList />
       </View>
+
+      <CreateQuestModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </SafeAreaView>
   );
 }

@@ -1,60 +1,103 @@
 import HunterProfile from "@/components/player/HunterProfile";
+import QuestCard from "@/components/quest/QuestCard";
+import Text from "@/components/ui/Text";
+import { theme } from "@/constants/theme";
 import { supabase } from "@/lib/supabase";
 import { usePlayerStore } from "@/store/usePlayerStore";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { useQuestStore } from "@/store/useQuestStore";
+import { router, useRouter } from "expo-router";
+import { useEffect } from "react";
+import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
-  const router = useRouter();
-  const [username, setUsername] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
-  const { addXP, xp, xpToNextLevel, levelUp } = usePlayerStore()
+  const nav = useRouter();
+  const { addXP, xp, xpToNextLevel } = usePlayerStore()
+
+  // Render up to 3 quests from quest list
+  const quests = useQuestStore(s => s.quests).slice(0, 3)
+
   useEffect(() => {
     const loadUser = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session?.user) {
-        router.replace("/(auth)/login");
-        return;
-      }
-
-      setEmail(session.user.email ?? null);
-      setUsername((session.user.user_metadata?.username as string) ?? null);
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) nav.replace("/(auth)/login");
     }
-
     loadUser();
-  }, [router]);
+  }, [nav]);
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      Alert.alert("Logout failed", error.message);
-      return;
-    }
-
-    router.replace("/(auth)/login");
+    await supabase.auth.signOut();
+    nav.replace("/(auth)/login");
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 justify-center px-6 gap-4">
-        <HunterProfile/>
-        {/* Logout Button */}
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.bg }}>
+      <ScrollView contentContainerStyle={{ padding: theme.spacing.md, gap: theme.spacing.lg }}>
+
+        <HunterProfile />
+
+        {/* Active Quests */}
+        <View style={{ gap: theme.spacing.md }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={{
+              fontFamily: theme.fonts.display,
+              fontSize: 11,
+              color: theme.colors.textDim,
+              letterSpacing: 2,
+            }}>
+              ACTIVE QUESTS
+            </Text>
+            <Pressable onPress={() => router.push('/(tabs)/QuestBoard')}>
+              <Text style={{
+                fontFamily: theme.fonts.display,
+                fontSize: 10,
+                color: theme.colors.purple,
+                letterSpacing: 1,
+              }}>
+                VIEW ALL
+              </Text>
+            </Pressable>
+          </View>
+
+          {quests.length === 0 ? (
+            <Text style={{ color: theme.colors.textDim, fontFamily: theme.fonts.body }}>
+              No active quests
+            </Text>
+          ) : (
+            quests.map(quest => (
+              <QuestCard key={quest.id} quest={quest} />
+            ))
+          )}
+        </View>
+
+        {/* Logout */}
         <Pressable
           onPress={handleLogout}
-          className="mt-4 bg-red-500 rounded-lg p-4 items-center"
+          style={{
+            backgroundColor: theme.colors.card,
+            borderRadius: theme.radius.md,
+            borderWidth: 1,
+            borderColor: theme.colors.red,
+            padding: theme.spacing.md,
+            alignItems: 'center',
+          }}
         >
-          <Text className="text-white font-semibold">Logout</Text>
+          <Text style={{
+            fontFamily: theme.fonts.display,
+            fontSize: 12,
+            color: theme.colors.red,
+            letterSpacing: 2,
+          }}>
+            LOGOUT
+          </Text>
         </Pressable>
-        <Pressable onPress={() => addXP(xpToNextLevel - xp)}>
-          <Text>Force Level Up</Text>
+
+        {/* Dev only */}
+        <Pressable onPress={() => addXP(xpToNextLevel - xp)} style={{ alignItems: 'center' }}>
+          <Text style={{ color: theme.colors.textDim, fontSize: 11 }}>Force Level Up</Text>
         </Pressable>
-      </View>
+
+      </ScrollView>
     </SafeAreaView>
   );
 }

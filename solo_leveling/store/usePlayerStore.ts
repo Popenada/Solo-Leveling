@@ -131,6 +131,6 @@ export const usePlayerStore = create<PlayerStore>()(
             })),
             resetStreak: () => set({ streak: 0 }),
         }),
-        { name: 'player-storage', storage: createJSONStorage(() => AsyncStorage) }
+        { name: 'player-storage-v2', storage: createJSONStorage(() => AsyncStorage) }
     )
 )
