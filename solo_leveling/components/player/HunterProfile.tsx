@@ -177,18 +177,20 @@ export default function HunterProfile() {
 
       {/* Stats section */}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md }}>
-        <StatGraph
-          strength={stats.strength}
-          agility={stats.agility}
-          vitality={stats.vitality}
-          intelligence={stats.intelligence}
-          size={160}
-        />
-        <View style={{ flex: 1, gap: theme.spacing.xs }}>
-          <StatBar stat="STR" value={stats.strength} icon="ICON" size="sm" />
-          <StatBar stat="AGI" value={stats.agility} icon="ICON" size="sm" />
-          <StatBar stat="VIT" value={stats.vitality} icon="ICON" size="sm" />
-          <StatBar stat="INT" value={stats.intelligence} icon="ICON" size="sm" />
+        <View style={{ flexShrink: 0 }}>
+          <StatGraph
+            strength={stats.STR}
+            agility={stats.AGI}
+            vitality={stats.VIT}
+            intelligence={stats.INT}
+            size={120}
+          />
+        </View>
+        <View style={{ flex: 1, gap: theme.spacing.sm }}>
+          <StatBar stat="STR" value={stats.STR} icon="ICON" size="sm" />
+          <StatBar stat="AGI" value={stats.AGI} icon="ICON" size="sm" />
+          <StatBar stat="VIT" value={stats.VIT} icon="ICON" size="sm" />
+          <StatBar stat="INT" value={stats.INT} icon="ICON" size="sm" />
         </View>
       </View>
 

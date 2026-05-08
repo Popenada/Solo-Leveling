@@ -5,11 +5,12 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 type Rank = 'E' | 'D' | 'C' | 'B' | 'A' | 'S'
 
 interface Stats {
-    strength: number
-    agility: number
-    vitality: number
-    intelligence: number
+    STR: number
+    AGI: number
+    VIT: number
+    INT: number
 }
+// All zustand methods and variables to be passed onto other components globally
 interface PlayerStore {
     name: string
     level: number
@@ -29,11 +30,16 @@ interface PlayerStore {
     addStreak: () => void
     resetStreak: () => void
     addQuestCount: () => void
+    // load profile method owns data variable
+    loadProfile: (data: any) => void
 }
-
+// function to calculating xp for next level upon level up 
+// use ^1.15 for incrementing xp to next level up  
 const XP_FOR_LEVEL = (level: number) => 
     Math.floor(100 * Math.pow(1.15, level - 1))
 
+// Create player store for storing player attributes such as levels, xp, and stats
+// Use zustand create method for global storaging for components
 export const usePlayerStore = create<PlayerStore>()(
     persist(
         (set, get) => ({
@@ -43,16 +49,33 @@ export const usePlayerStore = create<PlayerStore>()(
             xpToNextLevel: XP_FOR_LEVEL(1),
             rank: 'E',
             stats: {
-                strength: 50,
-                agility: 30,
-                vitality: 30,
-                intelligence: 30,
+                STR: 50,
+                AGI: 30,
+                VIT: 30,
+                INT: 30,
             },
             streak: 0,
             totalWorkouts: 0,
             triggerLevelUp: false,
             totalQuestsCompleted: 0,
-
+            
+            // Function to load hunter information
+            // Have data as parameter to be passed into function when calling
+            loadProfile: (data: any) => set({
+                level: data.level,
+                xp: data.xp, 
+                xpToNextLevel: data.xp_to_next_level,
+                rank: data.rank,
+                stats: {
+                    STR: data.STR,
+                    AGI: data.AGI,
+                    INT: data.INT,
+                    VIT: data.VIT,
+                },
+                streak: data.daily_streak,
+                totalQuestsCompleted: data.total_quests_completed,
+            }),
+            
             addXP: (amount) => {
                 const { xp, xpToNextLevel, levelUp } = get()
                 const newXP = xp + amount
@@ -69,25 +92,34 @@ export const usePlayerStore = create<PlayerStore>()(
             
             addStats: (rewards) => set(state => ({
                 stats: {
-                    strength: state.stats.strength + (rewards.STR ?? 0),
-                    agility: state.stats.agility + (rewards.AGI ?? 0),
-                    vitality: state.stats.vitality + (rewards.VIT ?? 0),
-                    intelligence: state.stats.intelligence + (rewards.INT ?? 0),
+                    STR: state.stats.STR + (rewards.STR ?? 0),
+                    AGI: state.stats.AGI + (rewards.AGI ?? 0),
+                    VIT: state.stats.VIT + (rewards.VIT ?? 0),
+                    INT: state.stats.INT + (rewards.INT ?? 0),
                 }
             })),
 
             levelUp: () => set(state => {
                 const newLevel = state.level + 1
+                // Add Rankup check once user levels up
+                const newRank = 
+                    newLevel >= 100 ? 'S' :
+                    newLevel >= 80 ? 'A' :
+                    newLevel >= 60 ? 'B' :
+                    newLevel >= 40 ? 'C' : 
+                    newLevel >= 20 ? 'D' : 'E'
                 return {
                     level: newLevel,
                     xp: 0,
                     xpToNextLevel: XP_FOR_LEVEL(newLevel),
                     triggerLevelUp: true,
+                    rank: newRank, 
                 }
             }),
 
             clearLevelUp: () => set({ triggerLevelUp: false }),
-
+            
+            // Update rank every 20
             rankUp: (rank) => set({ rank }),
 
             addStreak: () => set(state => ({

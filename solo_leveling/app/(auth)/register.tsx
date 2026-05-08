@@ -1,70 +1,100 @@
+import Alert from "@/components/ui/Alert";
+import Text from "@/components/ui/Text";
+import { theme } from "@/constants/theme";
+import { registerUser } from "@/lib/auth";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Pressable,
-  Text,
   TextInput,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { registerUser } from "@/lib/auth";
-
 export default function Register() {
   const router = useRouter();
 
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [alert, setAlert] = useState({ visible: false, title: '', message: '' })
   const handleRegister = async () => {
-    // validation and error checkings for registering
     if (!username || !email || !password || !confirmPassword) {
-      Alert.alert("Error", "Please fill all fields");
+      setAlert({visible: true, title: 'Error', message: "Please fll all fields"})
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords do not match");
+      setAlert({visible: true, title: "Error", message: "Passwords do not match"})
       return;
     }
 
     if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
+      setAlert({visible: true, title: "Error", message: "Password must be at least 6 characters"})
       return;
     }
 
     try {
       setLoading(true);
-      // Awaiting user authentication from authservice for email, password, and username
       const result = await registerUser(email, password, username);
 
       if (result?.needsEmailConfirmation) {
-        Alert.alert("Confirm Email", result.message);
+        setAlert({visible: true, title: "Confirm Email", message: "Email needs confirmation"})
       } else {
-        Alert.alert("Success", "Account created!");
+        setAlert({visible: true, title: "Success", message: "Account created!"})
         router.replace("/(tabs)/Profile");
       }
     } catch (err: any) {
-      Alert.alert("Registration failed", err.message || "Something went wrong");
+      setAlert({visible: true, title: "Registration failed", message: "Something went wrong"})
     } finally {
       setLoading(false);
     }
   };
 
+  const inputStyle = {
+    backgroundColor: theme.colors.card,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.md,
+    color: theme.colors.text,
+    fontFamily: theme.fonts.body,
+    fontSize: 15,
+  }
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 items-center justify-center px-6 gap-4">
-        <Text className="text-2xl font-bold">Create Account</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.bg }}>
+      <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: theme.spacing.lg, gap: theme.spacing.md }}>
+
+        <View style={{ gap: theme.spacing.xs, marginBottom: theme.spacing.md }}>
+          <Text style={{
+            fontFamily: theme.fonts.display,
+            fontSize: 28,
+            fontWeight: '900',
+            color: theme.colors.text,
+            letterSpacing: 2,
+          }}>
+            ARISE
+          </Text>
+          <Text style={{
+            fontFamily: theme.fonts.body,
+            fontSize: 14,
+            color: theme.colors.textDim,
+            letterSpacing: 1,
+          }}>
+            Create your hunter profile
+          </Text>
+        </View>
 
         <TextInput
-          placeholder="Username"
+          placeholder="Hunter Name"
           value={username}
           onChangeText={setUsername}
-          className="w-full border border-gray-300 rounded-lg p-3"
+          placeholderTextColor={theme.colors.textDim}
+          style={inputStyle}
         />
 
         <TextInput
@@ -73,7 +103,8 @@ export default function Register() {
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
-          className="w-full border border-gray-300 rounded-lg p-3"
+          placeholderTextColor={theme.colors.textDim}
+          style={inputStyle}
         />
 
         <TextInput
@@ -81,7 +112,8 @@ export default function Register() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          className="w-full border border-gray-300 rounded-lg p-3"
+          placeholderTextColor={theme.colors.textDim}
+          style={inputStyle}
         />
 
         <TextInput
@@ -89,27 +121,55 @@ export default function Register() {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
-          className="w-full border border-gray-300 rounded-lg p-3"
+          placeholderTextColor={theme.colors.textDim}
+          style={inputStyle}
         />
 
         <Pressable
           onPress={handleRegister}
           disabled={loading}
-          className="w-full bg-blue-500 rounded-lg p-4 items-center"
+          style={{
+            backgroundColor: theme.colors.purple,
+            borderRadius: theme.radius.md,
+            padding: theme.spacing.md,
+            alignItems: 'center',
+            ...theme.shadows.purple,
+          }}
         >
           {loading ? (
-            <ActivityIndicator color="white" />
+            <ActivityIndicator color={theme.colors.text} />
           ) : (
-            <Text className="text-white font-semibold">Register</Text>
+            <Text style={{
+              fontFamily: theme.fonts.display,
+              fontSize: 14,
+              fontWeight: '700',
+              color: theme.colors.text,
+              letterSpacing: 2,
+            }}>
+              BEGIN JOURNEY
+            </Text>
           )}
         </Pressable>
 
-        <Pressable onPress={() => router.push("/(auth)/login")}>
-          <Text className="text-blue-500 mt-4">
-            Already have an account? Login
+        <Pressable onPress={() => router.push("/(auth)/login")} style={{ alignItems: 'center' }}>
+          <Text style={{
+            fontFamily: theme.fonts.body,
+            fontSize: 13,
+            color: theme.colors.purpleLight,
+            letterSpacing: 1,
+          }}>
+            Already a hunter? Login
           </Text>
         </Pressable>
+
       </View>
+      {/* Alert message component */}
+      <Alert
+          visible={alert.visible}
+          title={alert.title}
+          message={alert.message}
+          onClose={() => setAlert(a => ({ ...a, visible: false }))}
+      />
     </SafeAreaView>
   );
 }

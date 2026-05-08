@@ -31,8 +31,8 @@ export default function StatGraph({ strength, agility, vitality, intelligence, s
   const MAX = 100
   const cx = size / 2
   const cy = size / 2
-  const outerR = size * 0.38
-  const labelR = size * 0.48
+  const outerR = size * 0.32
+  const labelR = size * 0.42
   const levels = [0.25, 0.5, 0.75, 1]
 
   // Build the filled polygon points from stat values

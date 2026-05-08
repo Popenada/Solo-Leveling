@@ -5,7 +5,7 @@ import { theme } from "@/constants/theme";
 import { WORKOUTS } from "@/constants/workouts";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { useQuestStore } from "@/store/useQuestStore";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, View } from 'react-native';
 export default function WorkoutDetail() {
@@ -107,6 +107,8 @@ export default function WorkoutDetail() {
                                 <Text variant="heading">{ex.name}</Text>
                             </Pressable>
                         ))}
+                        
+                        {/* Complete Button */}
                         {progress === 100 && (
                             <Pressable
                                 onPress={() => {
@@ -119,6 +121,7 @@ export default function WorkoutDetail() {
                                     addXP(workout.xpReward)
                                     completeQuest(id as string)
                                     addQuestCount()
+                                    router.back()
                                 }}
                                 style={{
                                     backgroundColor: theme.colors.gold,
