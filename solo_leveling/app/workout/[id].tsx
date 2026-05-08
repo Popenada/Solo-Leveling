@@ -88,6 +88,8 @@ export default function WorkoutDetail() {
                                         const next = new Set(prev)
                                         next.has(i) ? next.delete(i) : next.add(i)
                                         const newProgress = (next.size / workout.exercises.length) * 100
+
+                                        // Render workout detail first before calling updateQuest so doesn't trigger zustand state update preventing double render
                                         setTimeout(() => updateQuestProgress(id as string, newProgress), 0)
                                         return next
                                     })
