@@ -3,6 +3,11 @@
 A gamified workout app inspired by Solo Leveling. Complete quests, earn XP, level up your stats, and rank up from E to S.
 
 ---
+## Demo
+
+https://www.loom.com/share/ef5b33b44d124097a50cbd589dee4b18
+
+
 
 ## Tech Stack
 
