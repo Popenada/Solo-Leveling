@@ -21,7 +21,8 @@ interface PlayerStore {
     streak: number
     totalQuestsCompleted: number
     triggerLevelUp: boolean
-
+    completedToday: boolean
+    
     addXP: (amount: number) => void
     addStats: (rewards: Partial<Record<'STR'|'AGI'|'VIT'|'INT', number>>) => void
     levelUp: () => void
@@ -32,6 +33,8 @@ interface PlayerStore {
     addQuestCount: () => void
     // load profile method owns data variable
     loadProfile: (data: any) => void
+    setCompletedToday: (value: boolean) => void
+
 }
 // function to calculating xp for next level upon level up 
 // use ^1.15 for incrementing xp to next level up  
@@ -58,6 +61,7 @@ export const usePlayerStore = create<PlayerStore>()(
             totalWorkouts: 0,
             triggerLevelUp: false,
             totalQuestsCompleted: 0,
+            completedToday: true,
             
             // Function to load hunter information
             // Have data as parameter to be passed into function when calling
@@ -74,6 +78,7 @@ export const usePlayerStore = create<PlayerStore>()(
                 },
                 streak: data.daily_streak,
                 totalQuestsCompleted: data.total_quests_completed,
+                completedToday: data.completed_today,
             }),
             
             addXP: (amount) => {
@@ -98,7 +103,7 @@ export const usePlayerStore = create<PlayerStore>()(
                     INT: state.stats.INT + (rewards.INT ?? 0),
                 }
             })),
-
+            setCompletedToday: (value)=> set({ completedToday: value}),
             levelUp: () => set(state => {
                 const newLevel = state.level + 1
                 // Add Rankup check once user levels up

@@ -3,6 +3,7 @@
 import { TEST_QUESTS } from '@/constants/quests'
 import { Quest } from '@/types/Quest'
 import { create } from 'zustand'
+import { usePlayerStore } from './usePlayerStore'
 interface QuestStore {
   quests: Quest[],
   addQuest: (quest: Quest) => void
@@ -50,8 +51,10 @@ export const useQuestStore = create<QuestStore>()((set, get) => ({
     quests: state.quests.filter(q => q.type !=='weekly')
   })),
   // Check and compare timestamps 
+  // After reset if user has completed at least one workout, increment the streak count
   checkAndReset: () => {
     const { lastDailyReset, lastWeeklyReset } = get()
+    const { completedToday, addStreak, resetStreak, setCompletedToday } = usePlayerStore.getState()
     const now = Date.now()
     const ONE_DAY = 24 * 60 * 60 * 1000
     const ONE_WEEK = 7 * ONE_DAY
@@ -60,6 +63,12 @@ export const useQuestStore = create<QuestStore>()((set, get) => ({
       set({ lastDailyReset: now })
       console.log("Resetting daily quests")
       get().dailyResetQuests()
+      if (completedToday) {
+        addStreak()
+      } else {
+        resetStreak()
+      }
+      setCompletedToday(false)
     }
 
     if (now - lastWeeklyReset >= ONE_WEEK) {

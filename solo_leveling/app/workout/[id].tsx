@@ -13,7 +13,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 export default function WorkoutDetail() {
     const [started, setStarted] = useState(false)
 
-    
+    const setCompletedToday = usePlayerStore(s => s.setCompletedToday)
     // Declare UsePlayerStore functions to add stats on completion of quests
     const addStats = usePlayerStore(s => s.addStats)
     const addXP = usePlayerStore(s => s.addXP)
@@ -125,6 +125,7 @@ export default function WorkoutDetail() {
                                     addXP(workout.xpReward)
                                     completeQuest(id as string)
                                     addQuestCount()
+                                    setCompletedToday(true)
                                     // Declare state of player using usePlayerStore
                                     const state = usePlayerStore.getState()
                                     const { data: { user } } = await supabase.auth.getUser()
