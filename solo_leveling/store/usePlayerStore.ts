@@ -15,7 +15,7 @@ interface PlayerStore {
     name: string
     level: number
     xp: number
-    xpToNextLevel: number
+    xp_to_next_level: number
     rank: Rank
     stats: Stats
     streak: number
@@ -49,7 +49,7 @@ export const usePlayerStore = create<PlayerStore>()(
             name: 'Hunter',
             level: 1,
             xp: 100,
-            xpToNextLevel: XP_FOR_LEVEL(1),
+            xp_to_next_level: XP_FOR_LEVEL(1),
             rank: 'E',
             stats: {
                 STR: 50,
@@ -68,7 +68,7 @@ export const usePlayerStore = create<PlayerStore>()(
             loadProfile: (data: any) => set({
                 level: data.level,
                 xp: data.xp, 
-                xpToNextLevel: data.xp_to_next_level,
+                xp_to_next_level: data.xp_to_next_level,
                 rank: data.rank,
                 stats: {
                     STR: data.STR,
@@ -82,13 +82,13 @@ export const usePlayerStore = create<PlayerStore>()(
             }),
             
             addXP: (amount) => {
-                const { xp, xpToNextLevel, levelUp } = get()
+                const { xp, xp_to_next_level, levelUp } = get()
                 const newXP = xp + amount
 
-                if (newXP >= xpToNextLevel) {
+                if (newXP >= xp_to_next_level) {
                     levelUp()
                     // If leveled up, carry remainder of XP to next level
-                    const expOverflow = newXP - xpToNextLevel
+                    const expOverflow = newXP - xp_to_next_level
                     if (expOverflow > 0) get().addXP(expOverflow)
                 } else {
                     set({ xp: newXP })
@@ -116,7 +116,7 @@ export const usePlayerStore = create<PlayerStore>()(
                 return {
                     level: newLevel,
                     xp: 0,
-                    xpToNextLevel: XP_FOR_LEVEL(newLevel),
+                    xp_to_next_level: XP_FOR_LEVEL(newLevel),
                     triggerLevelUp: true,
                     rank: newRank, 
                 }

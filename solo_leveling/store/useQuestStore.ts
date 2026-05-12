@@ -34,7 +34,7 @@ export const useQuestStore = create<QuestStore>()((set, get) => ({
   },
   // Mark quest as complete
   completeQuest: (id) => set(state => ({
-    quests: state.quests.map(q => q.id === id ? {...q, completed: true, progress: 100} : q)
+    quests: state.quests.filter(q => q.id !== id)
   })),
 
   // Update quest progress

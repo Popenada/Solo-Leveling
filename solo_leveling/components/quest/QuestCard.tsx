@@ -6,6 +6,7 @@ import { theme } from '@/constants/theme'
 import type { Quest } from '@/types/Quest'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Pressable, View } from 'react-native'
 import Animated, {
     useAnimatedStyle,
@@ -101,7 +102,7 @@ export default function QuestCard({quest, onPress, onComplete}: Props) {
                         justifyContent: 'center',
                         backgroundColor: `${config.leftBar}1A`,
                     }}>
-                        <Text style={{ fontSize: 22 }}>{quest.icon}</Text>
+                        <MaterialCommunityIcons name={quest.icon as any} size={22} color={config.leftBar} />
                     </View>
 
                     <View style={{ flex: 1, gap: theme.spacing.xs }}>

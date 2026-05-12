@@ -2,7 +2,7 @@ import Text from '@/components/ui/Text'
 import { theme } from '@/constants/theme'
 import { usePlayerStore } from '@/store/usePlayerStore'
 import { useEffect } from 'react'
-import { View } from 'react-native'
+import { Image, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -16,12 +16,14 @@ import Rank from '../ui/Rank'
 import StatBar from '../ui/StatBar'
 import StatGraph from './StatGraph'
 
+const pfp = require('@/assets/images/hunterpfp.png')
+
 export default function HunterProfile() {
    const{
     name,
     level,
     xp,
-    xpToNextLevel,
+    xp_to_next_level,
     rank,
     stats,
     streak,
@@ -48,7 +50,7 @@ export default function HunterProfile() {
     transform: [{ rotate: `${ringRotate.value}deg` }]
   }))
 
-  const xpProg = Math.min((xp / xpToNextLevel) * 100, 100)
+  const xpProg = Math.min((xp / xp_to_next_level) * 100, 100)
 
   return (
     <View style={{
@@ -63,7 +65,6 @@ export default function HunterProfile() {
       shadowOpacity: 0.3,
       shadowRadius: 20,
       elevation: 8,
-      overflow: 'hidden',
     }}>
 
       {/* Header */}
@@ -82,7 +83,7 @@ export default function HunterProfile() {
             shadowOpacity: 0.6,
             shadowRadius: 12,
           }}>
-            <Text style={{ fontSize: 28 }}>Insert ICON here</Text>
+            <Image source={pfp} style={{ width: 54, height: 72, borderRadius: 12, position: 'absolute', top: -8 }} resizeMode="cover" />
           </View>
           <Animated.View style={[ringStyle, {
             position: 'absolute',
@@ -154,7 +155,7 @@ export default function HunterProfile() {
             fontSize: 11,
             color: theme.colors.cyan,
           }}>
-            {xp.toLocaleString()} / {xpToNextLevel.toLocaleString()} XP
+            {xp.toLocaleString()} / {xp_to_next_level.toLocaleString()} XP
           </Text>
         </View>
         <ProgressBar

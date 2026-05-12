@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen() {
   const nav = useRouter();
-  const { addXP, xp, xpToNextLevel } = usePlayerStore()
+  const { addXP, xp, xp_to_next_level } = usePlayerStore()
 
   // Render up to 3 quests from quest list
   const quests = useQuestStore(s => s.quests).slice(0, 3)
@@ -93,7 +93,7 @@ export default function ProfileScreen() {
         </Pressable>
 
         {/* Dev only */}
-        <Pressable onPress={() => addXP(xpToNextLevel - xp)} style={{ alignItems: 'center' }}>
+        <Pressable onPress={() => addXP(xp_to_next_level - xp)} style={{ alignItems: 'center' }}>
           <Text style={{ color: theme.colors.textDim, fontSize: 11 }}>Force Level Up</Text>
         </Pressable>
 

@@ -21,11 +21,13 @@ export const saveHunterProfile = async (userId: string, data: any) => {
         xp: data.xp,
         xp_to_next_level: data.xp_to_next_level,
         rank: data.rank,
+        VIT: data.stats.VIT,
         STR: data.stats.STR,
-        AGI: data.stats.VIT,
+        AGI: data.stats.AGI,
         INT: data.stats.INT,
-        streak: data.daily_streak,
+        daily_streak: data.streak,
         total_quests_completed: data.totalQuestsCompleted,
+        completed_today: data.completedToday,
     })
     .eq('id', userId)
 

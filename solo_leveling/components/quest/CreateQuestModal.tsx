@@ -3,6 +3,7 @@ import { theme } from '@/constants/theme'
 import { useQuestStore } from '@/store/useQuestStore'
 import { useWorkoutStore } from '@/store/useWorkoutStore'
 import type { Quest } from '@/types/Quest'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { Modal, Pressable, ScrollView, TextInput, View } from 'react-native'
 
@@ -15,7 +16,7 @@ const TYPE_COLORS: Record<QuestType, string> = {
     special: '#f5c842',
     penalty: '#ff4757',
 }
-const ICONS = ['⚔️', '🏋️', '🏃', '🧘', '💪', '🥊', '🚴', '🤸', '🏊', '🎯']
+const ICONS = ['dumbbell', 'run-fast', 'fire', 'yoga', 'arm-flex', 'boxing-glove', 'bike', 'weight-lifter', 'swim', 'bullseye-arrow']
 
 interface ExerciseInput {
     name: string
@@ -40,7 +41,7 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
     const [title, setTitle] = useState('')
     const [type, setType] = useState<QuestType>('daily')
     const [xpReward, setXpReward] = useState('50')
-    const [icon, setIcon] = useState('I')
+    const [icon, setIcon] = useState('dumbbell')
     // Exercises as an input array to allow multiple exercises to be added
     const [exercises, setExercises] = useState<ExerciseInput[]>([
         { name: '', sets: '3', reps: '10', restSeconds: '60' }
@@ -97,7 +98,7 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
         setTitle('')
         setType('daily')
         setXpReward('50')
-        setIcon('I')
+        setIcon('dumbbell')
         setExercises([{ name: '', sets: '3', reps: '10', restSeconds: '60' }])
         onClose()
     }
@@ -193,7 +194,7 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        <Text style={{ fontSize: 22 }}>{ic}</Text>
+                                        <MaterialCommunityIcons name={ic as any} size={22} color={icon === ic ? theme.colors.purple : theme.colors.textDim} />
                                     </Pressable>
                                 ))}
                             </View>
