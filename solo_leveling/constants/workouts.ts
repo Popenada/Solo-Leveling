@@ -7,9 +7,9 @@ export const WORKOUTS: Workout[] = [
         difficulty: 'D',
         timeRemaining: 30,
         exercises: [
-            { name: 'Push-ups', sets: 3, reps: 20, restSeconds: 60 },
-            { name: 'Diamond Push-ups', sets: 2, reps: 15, restSeconds: 45 },
-            { name: 'Wide Push-ups', sets: 2, reps: 15, restSeconds: 45 },
+            { workoutId: 'workout-1',name: 'Push-ups', sets: 3, reps: 20, restSeconds: 60 },
+            { workoutId: 'workout-1', name: 'Diamond Push-ups', sets: 2, reps: 15, restSeconds: 45 },
+            { workoutId: 'workout-1', name: 'Wide Push-ups', sets: 2, reps: 15, restSeconds: 45 },
         ],
         statRewards: { STR: 3, VIT: 1 },
         xpReward: 50
@@ -20,9 +20,9 @@ export const WORKOUTS: Workout[] = [
         difficulty: 'C',
         timeRemaining: 25,
         exercises: [
-            { name: 'Crunches', sets: 3, reps: 30, restSeconds: 45 },
-            { name: 'Leg Raises', sets: 3, reps: 20, restSeconds: 45 },
-            { name: 'Plank', sets: 3, reps: 60, restSeconds: 60 },
+            { workoutId: 'workout-2', name: 'Crunches', sets: 3, reps: 30, restSeconds: 45 },
+            { workoutId: 'workout-2', name: 'Leg Raises', sets: 3, reps: 20, restSeconds: 45 },
+            { workoutId: 'workout-2', name: 'Plank', sets: 3, reps: 60, restSeconds: 60 },
         ],
         statRewards: { STR: 1, VIT: 2, AGI: 1 },
         xpReward: 75
@@ -33,9 +33,9 @@ export const WORKOUTS: Workout[] = [
         difficulty: 'B',
         timeRemaining: 40,
         exercises: [
-            { name: '5km Run', sets: 1, reps: 1, restSeconds: 0 },
-            { name: 'Jump Rope', sets: 3, reps: 100, restSeconds: 60 },
-            { name: 'Burpees', sets: 3, reps: 15, restSeconds: 90 },
+            { workoutId: 'workout-3', name: '5km Run', sets: 1, reps: 1, restSeconds: 0 },
+            { workoutId: 'workout-3', name: 'Jump Rope', sets: 3, reps: 100, restSeconds: 60 },
+            { workoutId: 'workout-3', name: 'Burpees', sets: 3, reps: 15, restSeconds: 90 },
         ],
         statRewards: { AGI: 3, VIT: 2 },
         xpReward: 100
@@ -46,9 +46,9 @@ export const WORKOUTS: Workout[] = [
         difficulty: 'C',
         timeRemaining: 20,
         exercises: [
-            { name: 'Pull-ups', sets: 3, reps: 10, restSeconds: 90 },
-            { name: 'Chin-ups', sets: 3, reps: 8, restSeconds: 90 },
-            { name: 'Negative Pull-ups', sets: 2, reps: 5, restSeconds: 60 },
+            { workoutId: 'workout-4', name: 'Pull-ups', sets: 3, reps: 10, restSeconds: 90 },
+            { workoutId: 'workout-4', name: 'Chin-ups', sets: 3, reps: 8, restSeconds: 90 },
+            { workoutId: 'workout-4', name: 'Negative Pull-ups', sets: 2, reps: 5, restSeconds: 60 },
         ],
         statRewards: { STR: 2, AGI: 1, VIT: 1 },
         xpReward: 75

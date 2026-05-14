@@ -7,12 +7,38 @@ import { create } from 'zustand'
 interface WorkoutStore {
     workouts: Workout[]
     addWorkout: (workout: Workout) => void
-    // Identify quest id and match to the workout id from constants file
     getWorkoutByQuestId: (questId: string) => Workout | undefined
+    loadWorkouts: (workouts: any[]) => void
 }
 
 export const useWorkoutStore = create<WorkoutStore>()((set, get) => ({
     workouts: WORKOUTS,
     addWorkout: (workout) => set(state => ({ workouts: [...state.workouts, workout] })),
     getWorkoutByQuestId: (questId) => get().workouts.find(w => w.questId === questId),
+    loadWorkouts: (workouts) => set(() => ({
+        workouts: [
+            ...WORKOUTS,
+            ...workouts.map((w: any) => ({
+                id: w.id,
+                questId: w.quest_id,
+                userId: w.user_id,
+                difficulty: w.difficulty,
+                timeRemaining: w.time_remaining,
+                xpReward: w.xp_reward,
+                statRewards: {
+                    STR: w.str_reward,
+                    AGI: w.agi_reward,
+                    VIT: w.vit_reward,
+                    INT: w.int_reward,
+                },
+                exercises: (w.exercises ?? []).map((ex: any) => ({
+                    workoutId: ex.workout_id,
+                    name: ex.name,
+                    sets: ex.sets,
+                    reps: ex.reps,
+                    restSeconds: ex.rest_seconds,
+                })),
+            }))
+        ]
+    })),
 }))

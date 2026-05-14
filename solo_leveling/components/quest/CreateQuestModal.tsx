@@ -1,6 +1,6 @@
 import Text from '@/components/ui/Text'
 import { theme } from '@/constants/theme'
-import { saveQuests } from '@/lib/hunter'
+import { saveQuests, saveWorkouts } from '@/lib/hunter'
 import { supabase } from '@/lib/supabase'
 import { useQuestStore } from '@/store/useQuestStore'
 import { useWorkoutStore } from '@/store/useWorkoutStore'
@@ -34,7 +34,7 @@ interface Props {
 }
 
 export default function CreateQuestModal({ visible, onClose }: Props) {
-
+    
     // addQuest method to be passed down to addQuest component
     const addQuest = useQuestStore(s => s.addQuest)
     
@@ -68,7 +68,6 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
         if (!title.trim()) return
 
         const questId = uuidv4()
-
         addQuest({
             id: questId,
             type,
@@ -79,15 +78,18 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
             completed: false,
             createdAt: new Date(),
         })
-
+        const { data: { user } } = await supabase.auth.getUser()
+        
         addWorkout({
             id: `workout-${questId}`,
+            userId: user!.id,
             questId,
             difficulty: 'D',
             timeRemaining: 30,
             exercises: exercises
                 .filter(ex => ex.name.trim())
                 .map(ex => ({
+                    workoutId: `workout-${questId}`,
                     name: ex.name.trim(),
                     sets: parseInt(ex.sets) || 3,
                     reps: parseInt(ex.reps) || 10,
@@ -96,12 +98,12 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
             statRewards: { STR: 1 },
             xpReward: parseInt(xpReward) || 50,
         })
-
-        const { data: { user } } = await supabase.auth.getUser()
         const quests = useQuestStore.getState().quests
+        const workouts =  useWorkoutStore.getState().workouts
         // Save quests 
         await saveQuests(user!.id, quests)
-
+        // Save workouts
+        await saveWorkouts(user!.id, workouts)
         setTitle('')
         setType('daily')
         setXpReward('50')
