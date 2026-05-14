@@ -14,7 +14,7 @@ interface QuestStore {
   checkAndReset: () => void
   lastDailyReset: number
   lastWeeklyReset: number
-  
+  loadQuests: (quests: Quest[]) => void
 }
 
 // Create quest store to create what functions for quest
@@ -50,6 +50,9 @@ export const useQuestStore = create<QuestStore>()((set, get) => ({
   weeklyResetQuests: () => set(state => ({
     quests: state.quests.filter(q => q.type !=='weekly')
   })),
+  // Load quests
+  loadQuests: (quests: Quest[]) => set({ quests }),
+
   // Check and compare timestamps 
   // After reset if user has completed at least one workout, increment the streak count
   checkAndReset: () => {

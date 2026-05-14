@@ -1,12 +1,15 @@
 import Text from '@/components/ui/Text'
 import { theme } from '@/constants/theme'
+import { saveQuests } from '@/lib/hunter'
+import { supabase } from '@/lib/supabase'
 import { useQuestStore } from '@/store/useQuestStore'
 import { useWorkoutStore } from '@/store/useWorkoutStore'
 import type { Quest } from '@/types/Quest'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { Modal, Pressable, ScrollView, TextInput, View } from 'react-native'
-
+import 'react-native-get-random-values'
+import { v4 as uuidv4 } from 'uuid'
 type QuestType = Quest['type']
 
 const TYPES: QuestType[] = ['daily', 'weekly', 'special', 'penalty']
@@ -61,12 +64,11 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
     }
 
     // Function to create a quest and its corresponding exercise workouts
-    const handleCreate = () => {
+    const handleCreate = async () => {
         if (!title.trim()) return
 
-        const questId = Date.now().toString()
-        
-        // Use parseInt from textInput in component
+        const questId = uuidv4()
+
         addQuest({
             id: questId,
             type,
@@ -94,6 +96,11 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
             statRewards: { STR: 1 },
             xpReward: parseInt(xpReward) || 50,
         })
+
+        const { data: { user } } = await supabase.auth.getUser()
+        const quests = useQuestStore.getState().quests
+        // Save quests 
+        await saveQuests(user!.id, quests)
 
         setTitle('')
         setType('daily')

@@ -3,7 +3,7 @@ import { Workout } from "@/types/Workout";
 export const WORKOUTS: Workout[] = [
     {
         id: 'workout-1',
-        questId: 'quest-1',
+        questId: '146bbccc-e1e7-44ff-9b02-9989e0d02c82',
         difficulty: 'D',
         timeRemaining: 30,
         exercises: [
@@ -16,7 +16,7 @@ export const WORKOUTS: Workout[] = [
     },
     {
         id: 'workout-2',
-        questId: 'quest-2',
+        questId: 'e75982cd-5957-4cba-aa66-971035f4d48e',
         difficulty: 'C',
         timeRemaining: 25,
         exercises: [
@@ -29,7 +29,7 @@ export const WORKOUTS: Workout[] = [
     },
     {
         id: 'workout-3',
-        questId: 'quest-3',
+        questId: 'fd12f394-8fc4-4761-979f-49e45b834918',
         difficulty: 'B',
         timeRemaining: 40,
         exercises: [
@@ -42,7 +42,7 @@ export const WORKOUTS: Workout[] = [
     },
     {
         id: 'workout-4',
-        questId: 'quest-4',
+        questId: '0a2a5515-7307-46c0-8af2-67de5a47738e',
         difficulty: 'C',
         timeRemaining: 20,
         exercises: [

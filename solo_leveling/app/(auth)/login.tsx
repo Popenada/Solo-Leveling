@@ -2,8 +2,9 @@ import Alert from "@/components/ui/Alert";
 import Text from "@/components/ui/Text";
 import { theme } from "@/constants/theme";
 import { loginUser } from "@/lib/auth";
-import { fetchHunterProfile } from "@/lib/hunter";
+import { fetchHunterProfile, fetchQuests } from "@/lib/hunter";
 import { usePlayerStore } from "@/store/usePlayerStore";
+import { useQuestStore } from "@/store/useQuestStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -44,9 +45,11 @@ export default function LoginScreen() {
       // Create profile state from hunter API call fetch from loadProfile information id
       // Fetches hunter profile information from supabase to be passed to userPlayerStore to match unique id to player data
       const profile = await fetchHunterProfile(result.user.id)
-      console.log('profile fetched: ', profile)
+      const quests = await fetchQuests(result.user.id)
+      //console.log('profile fetched: ', profile)
+      console.log('quests fetched: ', quests)
       usePlayerStore.getState().loadProfile(profile)
-
+      useQuestStore.getState().loadQuests(quests)
       router.replace("/(tabs)/QuestBoard");
     } catch (err: any) {
       if (err.code === 'invalid_credentials'){

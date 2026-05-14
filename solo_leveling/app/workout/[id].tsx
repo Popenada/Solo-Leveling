@@ -2,7 +2,7 @@
 import ProgressBar from "@/components/ui/ProgressBar";
 import Text from "@/components/ui/Text";
 import { theme } from "@/constants/theme";
-import { saveHunterProfile } from "@/lib/hunter";
+import { saveHunterProfile, saveQuests } from "@/lib/hunter";
 import { supabase } from "@/lib/supabase";
 import { usePlayerStore } from "@/store/usePlayerStore";
 import { useQuestStore } from "@/store/useQuestStore";
@@ -72,7 +72,7 @@ export default function WorkoutDetail() {
                     <Text variant="caption">AGI +{workout.statRewards.AGI}</Text>
                 )}
                     {workout.statRewards.INT && (
-                    <Text variant="caption">END +{workout.statRewards.AGI}</Text>
+                    <Text variant="caption">END +{workout.statRewards.INT}</Text>
                 )}
                 </View>
                 
@@ -128,8 +128,10 @@ export default function WorkoutDetail() {
                                     setCompletedToday(true)
                                     // Declare state of player using usePlayerStore
                                     const state = usePlayerStore.getState()
+                                    const quests = useQuestStore.getState().quests
                                     const { data: { user } } = await supabase.auth.getUser()
                                     await saveHunterProfile(user!.id, state)
+                                    await saveQuests(user!.id, quests)
                                     router.back()
                                 }}
                                 style={{

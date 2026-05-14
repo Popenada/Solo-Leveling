@@ -5,7 +5,7 @@ import type { Quest } from '@/types/Quest'
 
 export const TEST_QUESTS: Quest[] = [
     {
-        id: 'quest-1',
+        id: '146bbccc-e1e7-44ff-9b02-9989e0d02c82',
         type: 'daily',
         title: 'STRENGTH TRAINING',
         icon: 'dumbbell',
@@ -15,7 +15,7 @@ export const TEST_QUESTS: Quest[] = [
         createdAt: new Date(),
     },
     {
-        id: 'quest-2',
+        id: 'e75982cd-5957-4cba-aa66-971035f4d48e',
         type: 'weekly',
         title: 'ABS',
         icon: 'fire',
@@ -25,7 +25,7 @@ export const TEST_QUESTS: Quest[] = [
         createdAt: new Date(),
     },
     {
-        id: 'quest-3',
+        id: 'fd12f394-8fc4-4761-979f-49e45b834918',
         type: 'special',
         title: 'ENDURANCE',
         icon: 'run-fast',
@@ -35,7 +35,7 @@ export const TEST_QUESTS: Quest[] = [
         createdAt: new Date(),
     },
     {
-        id: 'quest-4',
+        id: '0a2a5515-7307-46c0-8af2-67de5a47738e',
         type: 'penalty',
         title: 'PULL UPS',
         icon: 'arm-flex',
