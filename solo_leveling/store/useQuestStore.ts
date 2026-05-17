@@ -1,6 +1,8 @@
 // Import zustand for global use for components
 // Global data to be accessed include completed, adding quest, 
 import { TEST_QUESTS } from '@/constants/quests'
+import { saveQuests } from '@/lib/hunter'
+import { supabase } from '@/lib/supabase'
 import { Quest } from '@/types/Quest'
 import { create } from 'zustand'
 import { usePlayerStore } from './usePlayerStore'
@@ -24,9 +26,9 @@ export const useQuestStore = create<QuestStore>()((set, get) => ({
   quests: TEST_QUESTS,
   lastDailyReset: Date.now(),
   lastWeeklyReset: Date.now(),
+
   // Adds quest id from quest constant
   addQuest: (quest) => {
-    console.log('addQuest called', quest.title)
     set(state => {
       console.log('state before:', state.quests.length)
       return { quests: [...state.quests, quest] }
@@ -43,13 +45,27 @@ export const useQuestStore = create<QuestStore>()((set, get) => ({
     quests: state.quests.map(q => q.id === id ? {... q, progress} : q)
   })),
   // Wipe daily quests
-  dailyResetQuests: () => set (state => ({
-    quests: state.quests.filter(q => q.type !=='daily')
-  })),
+  dailyResetQuests: () => set (state => {
+    // Filter to only daily quests 
+    const dailyQuests = TEST_QUESTS.filter(q => q.type === 'daily')
+    const randomQuest = dailyQuests[Math.floor(Math.random() * dailyQuests.length)]
+    return { quests: [
+      ...state.quests.filter(q => q.type !=='daily'),
+      { ...randomQuest, progress: 0, completed: false, createdAt: new Date()}
+    ]
+  }
+  }),
   // Wipe weekly quests
-  weeklyResetQuests: () => set(state => ({
-    quests: state.quests.filter(q => q.type !=='weekly')
-  })),
+  weeklyResetQuests: () => set(state => {
+    const weeklyQuests = TEST_QUESTS.filter(q => q.type === 'weekly')
+    const randomQuest = weeklyQuests[Math.floor(Math.random() * weeklyQuests.length)]
+
+    return { quests: [
+        ...state.quests.filter(q => q.type !=='weekly'),
+       {...randomQuest, progress: 0, completed: false, createdAt: new Date()}
+      ]
+    }
+  }),
   loadQuests: (quests: any[]) => set({
     quests: quests.map(q => ({
       id: q.id,
@@ -66,9 +82,11 @@ export const useQuestStore = create<QuestStore>()((set, get) => ({
 
   // Check and compare timestamps 
   // After reset if user has completed at least one workout, increment the streak count
-  checkAndReset: () => {
+  checkAndReset: async () => {
     const { lastDailyReset, lastWeeklyReset } = get()
     const { completedToday, addStreak, resetStreak, setCompletedToday } = usePlayerStore.getState()
+    // Fetch user data from supabase 
+    const { data: { user } } = await supabase.auth.getUser()
     const now = Date.now()
     const ONE_DAY = 24 * 60 * 60 * 1000
     const ONE_WEEK = 7 * ONE_DAY
@@ -76,7 +94,12 @@ export const useQuestStore = create<QuestStore>()((set, get) => ({
     if (now - lastDailyReset >= ONE_DAY) {
       set({ lastDailyReset: now })
       console.log("Resetting daily quests")
+      await supabase.from('quests').delete()
+        .eq('user_id', user!.id)
+        .eq('type', 'daily')
       get().dailyResetQuests()
+      const quests = get().quests
+      await saveQuests(user!.id, quests)
       if (completedToday) {
         addStreak()
       } else {
@@ -88,6 +111,11 @@ export const useQuestStore = create<QuestStore>()((set, get) => ({
     if (now - lastWeeklyReset >= ONE_WEEK) {
       set({ lastWeeklyReset: now })
       console.log("Resetting weekly quests")
+      await supabase.from('quests').delete()
+        .eq('user_id', user!.id)
+        .eq('type', 'weekly')
+      const quests = get().quests
+      await saveQuests(user!.id, quests)
       get().weeklyResetQuests()
     }
   }

@@ -49,6 +49,7 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
     const [exercises, setExercises] = useState<ExerciseInput[]>([
         { name: '', sets: '3', reps: '10', restSeconds: '60' }
     ])
+    const [statRewards, setStatRewards] = useState({ STR: 1, AGI: 0, VIT: 0, INT: 0 })
 
     // function to add and edit sets, reps, and rest seconds to each workout
     const addExercise = () => {
@@ -95,7 +96,7 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
                     reps: parseInt(ex.reps) || 10,
                     restSeconds: parseInt(ex.restSeconds) || 60,
                 })),
-            statRewards: { STR: 1 },
+            statRewards,
             xpReward: parseInt(xpReward) || 50,
         })
         const quests = useQuestStore.getState().quests
@@ -109,6 +110,7 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
         setXpReward('50')
         setIcon('dumbbell')
         setExercises([{ name: '', sets: '3', reps: '10', restSeconds: '60' }])
+        setStatRewards({ STR: 1, AGI: 0, VIT: 0, INT: 0 })
         onClose()
     }
 
@@ -221,6 +223,25 @@ export default function CreateQuestModal({ visible, onClose }: Props) {
                             placeholderTextColor={theme.colors.textDim}
                             style={inputStyle}
                         />
+                    </View>
+
+                    {/* Stat Rewards */}
+                    <View style={{ gap: theme.spacing.xs }}>
+                        <Text style={{ fontFamily: theme.fonts.display, fontSize: 9, color: theme.colors.textDim, letterSpacing: 2 }}>STAT REWARDS</Text>
+                        <View style={{ flexDirection: 'row', gap: theme.spacing.sm }}>
+                            {(['STR', 'AGI', 'VIT', 'INT'] as const).map(stat => (
+                                <View key={stat} style={{ flex: 1, gap: 4 }}>
+                                    <Text style={{ fontFamily: theme.fonts.display, fontSize: 8, color: theme.colors.textDim, letterSpacing: 1 }}>{stat}</Text>
+                                    <TextInput
+                                        value={String(statRewards[stat])}
+                                        onChangeText={v => setStatRewards(prev => ({ ...prev, [stat]: parseInt(v) || 0 }))}
+                                        keyboardType="numeric"
+                                        placeholderTextColor={theme.colors.textDim}
+                                        style={inputStyle}
+                                    />
+                                </View>
+                            ))}
+                        </View>
                     </View>
 
                     {/* Exercises */}
