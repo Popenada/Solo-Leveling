@@ -50,6 +50,7 @@ export default function LoginScreen() {
       const workouts = await fetchWorkouts(result.user.id)
       //console.log('profile fetched: ', profile)
       console.log('quests fetched: ', quests)
+      //console.log('workouts fetched: ', workouts)
       usePlayerStore.getState().loadProfile(profile)
       useQuestStore.getState().loadQuests(quests)
       useWorkoutStore.getState().loadWorkouts(workouts)

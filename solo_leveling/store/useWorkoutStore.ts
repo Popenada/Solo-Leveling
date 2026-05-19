@@ -31,7 +31,11 @@ export const useWorkoutStore = create<WorkoutStore>()((set, get) => ({
                     VIT: w.vit_reward,
                     INT: w.int_reward,
                 },
-                exercises: (w.exercises ?? []).map((ex: any) => ({
+                exercises: (
+                    Array.isArray(w.exercises) ? w.exercises
+                    : w.exercises ? [w.exercises]
+                    : []
+                ).map((ex: any) => ({
                     workoutId: ex.workout_id,
                     name: ex.name,
                     sets: ex.sets,

@@ -19,7 +19,7 @@ export const TEST_QUESTS: Quest[] = [
         type: 'weekly',
         title: 'ABS',
         icon: 'fire',
-        progress: 100,
+        progress: 0,
         xpReward: 50,
         completed: true,
         createdAt: new Date(),

@@ -1,12 +1,12 @@
 import CreateQuestModal from "@/components/quest/CreateQuestModal";
 import QuestList from "@/components/quest/QuestList";
+import LevelUp from "@/components/effects/LevelUp";
 import Text from "@/components/ui/Text";
 import { theme } from "@/constants/theme";
 import { useQuestStore } from "@/store/useQuestStore";
 import { useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 export default function QuestBoardScreen() {
   const [modalVisible, setModalVisible] = useState(false)
   const lastDailyReset = useQuestStore(s => s.lastDailyReset)
@@ -106,6 +106,7 @@ export default function QuestBoardScreen() {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
       />
+      <LevelUp />
     </SafeAreaView>
   );
 }
