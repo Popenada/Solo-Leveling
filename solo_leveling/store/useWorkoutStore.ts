@@ -14,6 +14,7 @@ interface WorkoutStore {
 export const useWorkoutStore = create<WorkoutStore>()((set, get) => ({
     workouts: WORKOUTS,
     addWorkout: (workout) => set(state => ({ workouts: [...state.workouts, workout] })),
+    // Matches quest id that of the workout is corresponds with
     getWorkoutByQuestId: (questId) => get().workouts.find(w => w.questId === questId),
     loadWorkouts: (workouts) => set(() => ({
         workouts: [

@@ -84,6 +84,7 @@ export const saveWorkouts = async (userId: string, workouts: Workout[]) => {
             workout_id: ex.workoutId,
             name: ex.name,
             sets: ex.sets,
+            reps: ex.reps,
             rest_seconds: ex.restSeconds,
         })))
     if (exerciseError) throw exerciseError

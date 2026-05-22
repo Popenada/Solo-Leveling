@@ -26,6 +26,7 @@ export default function WorkoutDetail() {
     // Store workout by retrieving and calling function to identify quest id to hardcoded constant quests
     const getWorkoutByQuestId = useWorkoutStore(s => s.getWorkoutByQuestId)
     const { id } = useLocalSearchParams()
+    // Fetch workout corresponding via quest id
     const workout = getWorkoutByQuestId(id as string)
 
     if (!workout) return <View style={{flex:1, backgroundColor: 'red'}}><Text>not found: {String(id)}</Text></View>
